@@ -161,4 +161,9 @@ public class TodoList implements Serializable {
         }
         return listOfResult;
     }
+
+
+    public void addTodoItemToFavorite(String title){
+        todoItemsList[getIndexOfTodoItemWithTitle(title)].setFavourite(true);
+    }
 }
