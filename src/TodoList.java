@@ -198,6 +198,11 @@ public class TodoList implements Serializable {
     }
 
     public void addTodoItemToFavorite(String title){
-        todoItemsList[getIndexOfTodoItemWithTitle(title)].setFavourite(true);
+        int indexOfTodoItemWithTitle= getIndexOfTodoItemWithTitle(title);
+        if(indexOfTodoItemWithTitle==-1)
+            System.out.println("This title " + title + "is not Found");
+        else {
+            todoItemsList[indexOfTodoItemWithTitle].setFavourite(true);
+        }
     }
 }
