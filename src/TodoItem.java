@@ -59,7 +59,7 @@ public class TodoItem implements Serializable {
         this.endDate = endDate;
     }
 
-    public boolean isFavourite() {
+    public boolean getFavourite() {
         return favourite;
     }
 
