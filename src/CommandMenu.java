@@ -98,14 +98,18 @@ public class CommandMenu {
                     throw new Exception();
                 missingPriority = false;
             } catch (Exception e) {
-                System.out.println("Try again. A priority has to be >=1");
+
+               
+
+                System.out.println("Try again. Enter a correct priority number");
+
             }
         }
         //try and catch startDate
         LocalDate startDate=null ;
         boolean missingStartDate=true;
         while (missingStartDate){
-            System.out.println("Enter the start date of the todo item in the following format yy-mm-dd");
+            System.out.println("Enter the start date of the todo item in the following format yyyy-mm-dd");
             try {
                 startDate = LocalDate.parse(sc.nextLine());
                 missingStartDate=false;
@@ -118,7 +122,7 @@ public class CommandMenu {
         LocalDate endDate=null;
         boolean missingEndDate=true;
         while (missingEndDate){
-            System.out.println("Enter the end date of the todo item in the following format yy-mm-dd");
+            System.out.println("Enter the end date of the todo item in the following format yyyy-mm-dd");
             try {
                 endDate = LocalDate.parse(sc.nextLine());
                 missingEndDate=false;
@@ -179,8 +183,18 @@ public class CommandMenu {
     }
     private void printTodoItemsByStartDateOptions(){
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the start date of the todo item you want to search about in the following format yyyy-mm-dd");
-        LocalDate startDate = LocalDate.parse(sc.nextLine());
+        LocalDate startDate=null ;
+        boolean missingStartDate=true;
+        while (missingStartDate){
+            System.out.println("Enter the start date of the todo item you want to search about in the following format yyyy-mm-dd");
+            try {
+                startDate = LocalDate.parse(sc.nextLine());
+                missingStartDate=false;
+            }
+            catch (Exception e){
+                System.out.println("Wrong Start Date Format. Please enter the required start date format");
+            }
+        }
         if(todoList.searchByStartDate(startDate) == null){
             System.out.println("The item you search about doesn't exist in the list !!");
         }else{
@@ -193,8 +207,18 @@ public class CommandMenu {
     }
     private void printTodoItemsByEndDateOptions(){
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the end date of the todo item you want to search about in the following format yyyy-mm-dd");
-        LocalDate endDate = LocalDate.parse(sc.nextLine());
+        LocalDate endDate=null;
+        boolean missingEndDate=true;
+        while (missingEndDate){
+            System.out.println("Enter the end date of the todo item you want to search about in the following format yyyy-mm-dd");
+            try {
+                endDate = LocalDate.parse(sc.nextLine());
+                missingEndDate=false;
+            }
+            catch (Exception e){
+                System.out.println("Wrong End Date Format. Please enter the required end date format");
+            }
+        }
         if(todoList.searchByEndDate(endDate) == null){
             System.out.println("The item you search about doesn't exist in the list !!");
         }else{
@@ -207,12 +231,18 @@ public class CommandMenu {
     }
     private void printTodoItemsByPriorityOptions(){
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the priority you want to search about:");
-        int priority = sc.nextInt();
-        while(priority<1){
-            System.out.println("Try again. A priority has to be >=1");
-            System.out.println("Enter the priority of the new todo item (the highest the input the lowest the priority. Highest priority is 1)");
-            priority = sc.nextInt();
+        boolean missingPriority = true;
+        int priority =-1;
+        while(missingPriority) {
+            System.out.println("Enter the priority you want to search about:");
+            try {
+                priority = sc.nextInt();
+                if (priority < 1)
+                    throw new Exception();
+                missingPriority = false;
+            } catch (Exception e) {
+                System.out.println("Try again. Enter a correct priority number");
+            }
         }
         if(todoList.searchByPriority(priority) == null){
             System.out.println("The item you search about doesn't exist in the list !!");
