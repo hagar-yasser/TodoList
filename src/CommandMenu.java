@@ -9,11 +9,11 @@ public class CommandMenu {
     }
 
     public void executeFunctionFromTheCommandLine() {
-        while (true){
+        while (true) {
             printMainMenu();
             Scanner sc = new Scanner(System.in);
-            String command=sc.nextLine();
-            switch (command){
+            String command = sc.nextLine();
+            switch (command) {
                 case "1":
                     printAddItemOptions();
                     break;
@@ -87,20 +87,46 @@ public class CommandMenu {
         String description = sc.nextLine();
         System.out.println("Enter the category of the new todo item");
         String category = sc.nextLine();
-        System.out.println("Enter the priority of the new todo item (the highest the input the lowest the priority. Highest priority is 1)");
         //try and catch on priority
-        int priority = Integer.parseInt(sc.nextLine());
-        while(priority<1){
-            System.out.println("Try again. A priority has to be >=1");
+        boolean missingPriority = true;
+        int priority =-1;
+        while(missingPriority) {
             System.out.println("Enter the priority of the new todo item (the highest the input the lowest the priority. Highest priority is 1)");
-            priority = Integer.parseInt(sc.nextLine());
+            try {
+                priority = Integer.parseInt(sc.nextLine());
+                if (priority < 1)
+                    throw new Exception();
+                missingPriority = false;
+            } catch (Exception e) {
+                System.out.println("Try again. A priority has to be >=1");
+            }
         }
-        System.out.println("Enter the start date of the todo item in the following format yy-mm-dd");
         //try and catch startDate
-        LocalDate startDate = LocalDate.parse(sc.nextLine());
-        System.out.println("Enter the end date of the todo item in the following format yy-mm-dd");
+        LocalDate startDate=null ;
+        boolean missingStartDate=true;
+        while (missingStartDate){
+            System.out.println("Enter the start date of the todo item in the following format yy-mm-dd");
+            try {
+                startDate = LocalDate.parse(sc.nextLine());
+                missingStartDate=false;
+            }
+            catch (Exception e){
+                System.out.println("Wrong Start Date Format. Please enter the required start date format");
+            }
+        }
         //try and catch endDate
-        LocalDate endDate = LocalDate.parse(sc.nextLine());
+        LocalDate endDate=null;
+        boolean missingEndDate=true;
+        while (missingEndDate){
+            System.out.println("Enter the end date of the todo item in the following format yy-mm-dd");
+            try {
+                endDate = LocalDate.parse(sc.nextLine());
+                missingEndDate=false;
+            }
+            catch (Exception e){
+                System.out.println("Wrong End Date Format. Please enter the required end date format");
+            }
+        }
         TodoItem newItem = new TodoItem();
         newItem.setTitle(title);
         newItem.setCategory(category);
@@ -109,6 +135,7 @@ public class CommandMenu {
         newItem.setStartDate(startDate);
         newItem.setEndDate(endDate);
         todoList.addItem(newItem);
+        System.out.println("Addition Operation Done");
     }
 
     private void printDeleteItemOptions() {
@@ -116,6 +143,7 @@ public class CommandMenu {
         System.out.println("Enter the title of the todo item you want to delete");
         String title = sc.nextLine();
         todoList.deleteItem(title);
+        System.out.println("Delete Operation Done");
     }
 
     private void printShowTopFiveByStartDate() {
