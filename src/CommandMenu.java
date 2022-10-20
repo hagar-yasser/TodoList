@@ -109,7 +109,7 @@ public class CommandMenu {
         LocalDate startDate=null ;
         boolean missingStartDate=true;
         while (missingStartDate){
-            System.out.println("Enter the start date of the todo item in the following format yy-mm-dd");
+            System.out.println("Enter the start date of the todo item in the following format yyyy-mm-dd");
             try {
                 startDate = LocalDate.parse(sc.nextLine());
                 missingStartDate=false;
@@ -122,7 +122,7 @@ public class CommandMenu {
         LocalDate endDate=null;
         boolean missingEndDate=true;
         while (missingEndDate){
-            System.out.println("Enter the end date of the todo item in the following format yy-mm-dd");
+            System.out.println("Enter the end date of the todo item in the following format yyyy-mm-dd");
             try {
                 endDate = LocalDate.parse(sc.nextLine());
                 missingEndDate=false;
