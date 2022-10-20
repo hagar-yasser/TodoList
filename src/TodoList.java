@@ -189,7 +189,12 @@ public class TodoList implements Serializable {
         return actualListOfTodoItemsWithoutNulls;
     }
     public void addTodoItemToCategory( String title, String category){
-        todoItemsList[getIndexOfTodoItemWithTitle(title)].setCategory(category);
+        int indexOfTodoItemWithTitle= getIndexOfTodoItemWithTitle(title);
+        if(indexOfTodoItemWithTitle==-1)
+            System.out.println("This title " + title + "is not Found");
+        else {
+            todoItemsList[indexOfTodoItemWithTitle].setCategory(category);
+        }
     }
 
     public void addTodoItemToFavorite(String title){
