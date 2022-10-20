@@ -162,6 +162,15 @@ public class TodoList implements Serializable {
         return listOfResult;
     }
 
+    public TodoItem[] showAllItems() {
+        if(indexOfLastItemInList==-1)
+            return null;
+
+        TodoItem[] actualListOfTodoItemsWithoutNulls = new TodoItem[indexOfLastItemInList+1];
+        for(int counter=0; counter<=indexOfLastItemInList;counter++)
+            actualListOfTodoItemsWithoutNulls[counter] = todoItemsList[counter];
+        return actualListOfTodoItemsWithoutNulls;
+    }
     public void addTodoItemToCategory( String title, String category){
         todoItemsList[getIndexOfTodoItemWithTitle(title)].setCategory(category);
     }
