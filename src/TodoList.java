@@ -115,33 +115,41 @@ public class TodoList implements Serializable {
                 sizeOfListOfResult++;
             }
         }
-        TodoItem[] listOfResult = new TodoItem[sizeOfListOfResult];
-        int indexOfListOfResult = 0;
-        for (int j = 0; j <= indexOfLastItemInList; j++) {
-            if (todoItemsList[j].getStartDate().compareTo(startDate) == 0) {
-                listOfResult[indexOfListOfResult] = todoItemsList[j];
-                indexOfListOfResult++;
+        if(sizeOfListOfResult == 0){
+            return null;
+        }else{
+            TodoItem[] listOfResult = new TodoItem[sizeOfListOfResult];
+            int indexOfListOfResult = 0;
+            for (int j = 0; j <= indexOfLastItemInList; j++) {
+                if (todoItemsList[j].getStartDate().compareTo(startDate) == 0) {
+                    listOfResult[indexOfListOfResult] = todoItemsList[j];
+                    indexOfListOfResult++;
+                }
             }
+            return listOfResult;
         }
-        return listOfResult;
     }
 
-    public TodoItem[] searchByEnDate(LocalDate endDate) {
+    public TodoItem[] searchByEndDate(LocalDate endDate) {
         int sizeOfListOfResult = 0;
         for (int i = 0; i <= indexOfLastItemInList; i++) {
             if (todoItemsList[i].getEndDate().compareTo(endDate) == 0) {
                 sizeOfListOfResult++;
             }
         }
-        TodoItem[] listOfResult = new TodoItem[sizeOfListOfResult];
-        int indexOfListOfResult = 0;
-        for (int j = 0; j <= indexOfLastItemInList; j++) {
-            if (todoItemsList[j].getEndDate().compareTo(endDate) == 0) {
-                listOfResult[indexOfListOfResult] = todoItemsList[j];
-                indexOfListOfResult++;
+        if(sizeOfListOfResult == 0){
+            return null;
+        }else{
+            TodoItem[] listOfResult = new TodoItem[sizeOfListOfResult];
+            int indexOfListOfResult = 0;
+            for (int j = 0; j <= indexOfLastItemInList; j++) {
+                if (todoItemsList[j].getEndDate().compareTo(endDate) == 0) {
+                    listOfResult[indexOfListOfResult] = todoItemsList[j];
+                    indexOfListOfResult++;
+                }
             }
+            return listOfResult;
         }
-        return listOfResult;
     }
 
     public TodoItem[] searchByPriority(int priority) {
@@ -151,15 +159,19 @@ public class TodoList implements Serializable {
                 sizeOfListOfResult++;
             }
         }
-        TodoItem[] listOfResult = new TodoItem[sizeOfListOfResult];
-        int indexOfListOfResult = 0;
-        for (int j = 0; j <= indexOfLastItemInList; j++) {
-            if (todoItemsList[j].getPriority() == priority) {
-                listOfResult[indexOfListOfResult] = todoItemsList[j];
-                indexOfListOfResult++;
+        if(sizeOfListOfResult == 0){
+            return null;
+        }else{
+            TodoItem[] listOfResult = new TodoItem[sizeOfListOfResult];
+            int indexOfListOfResult = 0;
+            for (int j = 0; j <= indexOfLastItemInList; j++) {
+                if (todoItemsList[j].getPriority() == priority) {
+                    listOfResult[indexOfListOfResult] = todoItemsList[j];
+                    indexOfListOfResult++;
+                }
             }
+            return listOfResult;
         }
-        return listOfResult;
     }
 
 
