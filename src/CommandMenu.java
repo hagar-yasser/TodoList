@@ -34,7 +34,7 @@ public class CommandMenu {
                     break;
                 case "7":
                     //print search by title
-
+                    break;
                 case "8":
                     //print search by start date
                     break;
@@ -50,15 +50,18 @@ public class CommandMenu {
                 case "12":
                     //print add item to favourite
                     break;
-                default:
+                case "0":
+                    //exit
                     return;
+
+                default:
+                    System.out.println("Wrong input. Please enter a valid input");
             }
         }
     }
 
     private void printMainMenu() {
-        System.out.println("Type the number of the command you want to perform and press enter. " +
-                "If you want to save and exit press any other button");
+        System.out.println("Type the number of the command you want to perform and press enter.");
         System.out.println("1- Add Item to the todo List");
         System.out.println("2- Update an Item in the todo List");
         System.out.println("3 - Delete Item from the todo List");
@@ -71,6 +74,7 @@ public class CommandMenu {
         System.out.println("10- Search for Items in the Todo List by Priority");
         System.out.println("11- Add Item to a Category");
         System.out.println("12- Add Item to Favourites");
+        System.out.println("0- exit");
 
 
     }
@@ -84,10 +88,18 @@ public class CommandMenu {
         System.out.println("Enter the category of the new todo item");
         String category = sc.nextLine();
         System.out.println("Enter the priority of the new todo item (the highest the input the lowest the priority. Highest priority is 1)");
+        //try and catch on priority
         int priority = Integer.parseInt(sc.nextLine());
+        while(priority<1){
+            System.out.println("Try again. A priority has to be >=1");
+            System.out.println("Enter the priority of the new todo item (the highest the input the lowest the priority. Highest priority is 1)");
+            priority = Integer.parseInt(sc.nextLine());
+        }
         System.out.println("Enter the start date of the todo item in the following format yy-mm-dd");
+        //try and catch startDate
         LocalDate startDate = LocalDate.parse(sc.nextLine());
         System.out.println("Enter the end date of the todo item in the following format yy-mm-dd");
+        //try and catch endDate
         LocalDate endDate = LocalDate.parse(sc.nextLine());
         TodoItem newItem = new TodoItem();
         newItem.setTitle(title);
@@ -108,7 +120,7 @@ public class CommandMenu {
 
     private void printShowTopFiveByStartDate() {
         TodoItem[] todoListSortedAscendinglyByStartDate = todoList.sortAscendinglyByStartDate();
-        ;
+
         for (int i = 0; i < 5 && i < todoListSortedAscendinglyByStartDate.length; i++) {
             if (todoListSortedAscendinglyByStartDate[i] == null) {
                 System.out.println("The above items are the only items in the todoList");
