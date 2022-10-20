@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class TodoItem {
+public class TodoItem implements Serializable {
     private String title;
     private String description;
     private String category;
