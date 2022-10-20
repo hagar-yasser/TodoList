@@ -98,7 +98,11 @@ public class CommandMenu {
                     throw new Exception();
                 missingPriority = false;
             } catch (Exception e) {
+
+               
+
                 System.out.println("Try again. Enter a correct priority number");
+
             }
         }
         //try and catch startDate

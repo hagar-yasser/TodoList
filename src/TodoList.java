@@ -173,4 +173,48 @@ public class TodoList implements Serializable {
             return listOfResult;
         }
     }
+
+
+    public void updateItem(String title, TodoItem updatedTodoItem){
+        int indexOfTodoItemWithTitle= getIndexOfTodoItemWithTitle(title);
+        if(indexOfTodoItemWithTitle==-1)
+            System.out.println("This title " + title + "is not Found");
+        else{
+            todoItemsList[indexOfTodoItemWithTitle].setTitle(updatedTodoItem.getTitle());
+            todoItemsList[indexOfTodoItemWithTitle].setDescription(updatedTodoItem.getDescription());
+            todoItemsList[indexOfTodoItemWithTitle].setPriority(updatedTodoItem.getPriority());
+            todoItemsList[indexOfTodoItemWithTitle].setFavourite(updatedTodoItem.getFavourite());
+            todoItemsList[indexOfTodoItemWithTitle].setCategory(updatedTodoItem.getCategory());
+            todoItemsList[indexOfTodoItemWithTitle].setStartDate(updatedTodoItem.getStartDate());
+            todoItemsList[indexOfTodoItemWithTitle].setEndDate(updatedTodoItem.getEndDate());
+
+
+        }
+    }
+    public TodoItem[] showAllItems() {
+        if(indexOfLastItemInList==-1)
+            return null;
+
+        TodoItem[] actualListOfTodoItemsWithoutNulls = new TodoItem[indexOfLastItemInList+1];
+        for(int counter=0; counter<=indexOfLastItemInList;counter++)
+            actualListOfTodoItemsWithoutNulls[counter] = todoItemsList[counter];
+        return actualListOfTodoItemsWithoutNulls;
+    }
+    public void addTodoItemToCategory( String title, String category){
+        int indexOfTodoItemWithTitle= getIndexOfTodoItemWithTitle(title);
+        if(indexOfTodoItemWithTitle==-1)
+            System.out.println("This title " + title + "is not Found");
+        else {
+            todoItemsList[indexOfTodoItemWithTitle].setCategory(category);
+        }
+    }
+
+    public void addTodoItemToFavorite(String title){
+        int indexOfTodoItemWithTitle= getIndexOfTodoItemWithTitle(title);
+        if(indexOfTodoItemWithTitle==-1)
+            System.out.println("This title " + title + "is not Found");
+        else {
+            todoItemsList[indexOfTodoItemWithTitle].setFavourite(true);
+        }
+    }
 }
