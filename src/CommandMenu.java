@@ -33,16 +33,16 @@ public class CommandMenu {
                     printShowTopFiveByEndDate();
                     break;
                 case "7":
-                    //print search by title
+                    printTodoItemsByTitleOptions();
                     break;
                 case "8":
-                    //print search by start date
+                    printTodoItemsByStartDateOptions();
                     break;
                 case "9":
-                    //print search by end date
+                    printTodoItemsByEndDateOptions();
                     break;
                 case "10":
-                    //print search by priority
+                    printTodoItemsByPriorityOptions();
                     break;
                 case "11":
                     //print add item to category
@@ -169,6 +169,59 @@ public class CommandMenu {
             }
             System.out.println(todoListSortedAscendinglyByEndDate[i]);
 
+        }
+    }
+    private void printTodoItemsByTitleOptions(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter The title you want to search about: ");
+        String title = sc.nextLine();
+        System.out.println(todoList.searchByTitle(title));
+    }
+    private void printTodoItemsByStartDateOptions(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the start date of the todo item you want to search about in the following format yyyy-mm-dd");
+        LocalDate startDate = LocalDate.parse(sc.nextLine());
+        if(todoList.searchByStartDate(startDate) == null){
+            System.out.println("The item you search about doesn't exist in the list !!");
+        }else{
+            TodoItem[] listOfResult = todoList.searchByStartDate(startDate);
+            System.out.println("The result after searching: ");
+            for (int i= 0; i < listOfResult.length; i++){
+                System.out.println(listOfResult[i]);
+            }
+        }
+    }
+    private void printTodoItemsByEndDateOptions(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the end date of the todo item you want to search about in the following format yyyy-mm-dd");
+        LocalDate endDate = LocalDate.parse(sc.nextLine());
+        if(todoList.searchByEndDate(endDate) == null){
+            System.out.println("The item you search about doesn't exist in the list !!");
+        }else{
+            TodoItem[] listOfResult = todoList.searchByEndDate(endDate);
+            System.out.println("The result after searching: ");
+            for (int i= 0; i < listOfResult.length; i++){
+                System.out.println(listOfResult[i]);
+            }
+        }
+    }
+    private void printTodoItemsByPriorityOptions(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the priority you want to search about:");
+        int priority = sc.nextInt();
+        while(priority<1){
+            System.out.println("Try again. A priority has to be >=1");
+            System.out.println("Enter the priority of the new todo item (the highest the input the lowest the priority. Highest priority is 1)");
+            priority = sc.nextInt();
+        }
+        if(todoList.searchByPriority(priority) == null){
+            System.out.println("The item you search about doesn't exist in the list !!");
+        }else{
+            TodoItem[] listOfResult = todoList.searchByPriority(priority);
+            System.out.println("The result after searching: ");
+            for (int i= 0; i < listOfResult.length; i++){
+                System.out.println(listOfResult[i]);
+            }
         }
     }
 
