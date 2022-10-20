@@ -7,7 +7,7 @@ public class TodoItem {
     private int priority;
     private LocalDate startDate;
     private LocalDate endDate;
-    private boolean favourite;
+    private boolean favourite=false;
 
 
     public String getTitle() {
