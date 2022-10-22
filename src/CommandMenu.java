@@ -255,4 +255,13 @@ public class CommandMenu {
         }
     }
 
+    private void printAddItemToFavoriteOptions(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the title of Todo you want to add to favourite ");
+        String title = sc.nextLine();
+        todoList.addTodoItemToFavorite(title);
+
+
+    }
+
 }
