@@ -24,7 +24,7 @@ public class CommandMenu {
                     printDeleteItemOptions();
                     break;
                 case "4":
-                    //show all items
+                    printShowAllItemsOptions();
                     break;
                 case "5":
                     printShowTopFiveByStartDate();
@@ -150,6 +150,18 @@ public class CommandMenu {
         System.out.println("Delete Operation Done");
     }
 
+    private void printShowAllItemsOptions(){
+        TodoItem[] todoList1 = todoList.showAllItems();
+        if(todoList1==null){
+            System.out.println("There's no todo to show ");
+        }
+        else{
+            for(int counter=0;counter<todoList1.length;counter++){
+                System.out.println(todoList1[counter].toString());
+            }
+        }
+
+    }
     private void printShowTopFiveByStartDate() {
         TodoItem[] todoListSortedAscendinglyByStartDate = todoList.sortAscendinglyByStartDate();
 
@@ -258,6 +270,8 @@ public class CommandMenu {
             }
         }
     }
+
+
     private void printAddTodoItemToCategoryOptions(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the title of Todo you want to add to favourite ");
