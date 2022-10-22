@@ -179,7 +179,11 @@ public class CommandMenu {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter The title you want to search about: ");
         String title = sc.nextLine();
-        System.out.println(todoList.searchByTitle(title));
+        if(todoList.searchByTitle(title) == null){
+            System.out.println("The item you search about doesn't exist in the list !!");
+        }else{
+            System.out.println(todoList.searchByTitle(title));
+        }
     }
     private void printTodoItemsByStartDateOptions(){
         Scanner sc = new Scanner(System.in);
@@ -236,7 +240,7 @@ public class CommandMenu {
         while(missingPriority) {
             System.out.println("Enter the priority you want to search about:");
             try {
-                priority = sc.nextInt();
+                priority = Integer.parseInt(sc.nextLine());
                 if (priority < 1)
                     throw new Exception();
                 missingPriority = false;
