@@ -48,7 +48,7 @@ public class CommandMenu {
                     //print add item to category
                     break;
                 case "12":
-                    //print add item to favourite
+                    printAddItemToFavoriteOptions();
                     break;
                 case "0":
                     //exit
@@ -257,6 +257,15 @@ public class CommandMenu {
                 System.out.println(listOfResult[i]);
             }
         }
+    }
+
+    private void printAddItemToFavoriteOptions(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the title of Todo you want to add to favourite ");
+        String title = sc.nextLine();
+        todoList.addTodoItemToFavorite(title);
+
+
     }
 
 }
