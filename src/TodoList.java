@@ -203,9 +203,10 @@ public class TodoList implements Serializable {
     public void addTodoItemToCategory( String title, String category){
         int indexOfTodoItemWithTitle= getIndexOfTodoItemWithTitle(title);
         if(indexOfTodoItemWithTitle==-1)
-            System.out.println("This title " + title + "is not Found");
+            System.out.println("The todo with this title is not found\nThe mission is failed!!!!");
         else {
             todoItemsList[indexOfTodoItemWithTitle].setCategory(category);
+            System.out.println("Mission is completed successfully ");
         }
     }
 
