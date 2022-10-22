@@ -45,10 +45,10 @@ public class CommandMenu {
                     printTodoItemsByPriorityOptions();
                     break;
                 case "11":
-                    //print add item to category
+                    printAddTodoItemToCategoryOptions();
                     break;
                 case "12":
-                    printAddItemToFavoriteOptions();
+                    printAddTodoItemToFavoriteOptions();
                     break;
                 case "0":
                     //exit
@@ -258,8 +258,15 @@ public class CommandMenu {
             }
         }
     }
-
-    private void printAddItemToFavoriteOptions(){
+    private void printAddTodoItemToCategoryOptions(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the title of Todo you want to add to favourite ");
+        String title = sc.nextLine();
+        System.out.println("Enter the category of Todo you want to update");
+        String category = sc.nextLine();
+        todoList.addTodoItemToCategory(title,category);
+    }
+    private void printAddTodoItemToFavoriteOptions(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the title of Todo you want to add to favourite ");
         String title = sc.nextLine();
