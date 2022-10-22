@@ -48,7 +48,7 @@ public class CommandMenu {
                     //print add item to category
                     break;
                 case "12":
-                    //print add item to favourite
+                    printAddItemToFavoriteOptions();
                     break;
                 case "0":
                     //exit
