@@ -149,8 +149,15 @@ public class CommandMenu {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the title of Todo you want to update ");
         String title = sc.nextLine();
-        TodoItem updatedTodo = printTodoItemMenu();
-        todoList.updateItem(title,updatedTodo);
+        TodoItem todoWantToUpdate = todoList.searchByTitle(title);
+        if(todoWantToUpdate==null)
+            System.out.println("This todo with this title is not found\nMission is failed");
+        else {
+            System.out.println("The todo you want to update ");
+            System.out.println(todoWantToUpdate);
+            TodoItem updatedTodo = printTodoItemMenu();
+            todoList.updateItem(title, updatedTodo);
+        }
     }
     private void printDeleteItemOptions() {
         Scanner sc = new Scanner(System.in);
