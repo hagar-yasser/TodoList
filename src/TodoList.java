@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -183,9 +181,8 @@ public class TodoList implements Serializable {
 
     public void updateItem(String title, TodoItem updatedTodoItem){
         int indexOfTodoItemWithTitle= getIndexOfTodoItemWithTitle(title);
-        if(indexOfTodoItemWithTitle==-1)
-            System.out.println("This title " + title + "is not Found");
-        else{
+        if(getIndexOfTodoItemWithTitle(updatedTodoItem.getTitle()) == indexOfTodoItemWithTitle ||
+                getIndexOfTodoItemWithTitle(updatedTodoItem.getTitle()) == -1){
             todoItemsList[indexOfTodoItemWithTitle].setTitle(updatedTodoItem.getTitle());
             todoItemsList[indexOfTodoItemWithTitle].setDescription(updatedTodoItem.getDescription());
             todoItemsList[indexOfTodoItemWithTitle].setPriority(updatedTodoItem.getPriority());
@@ -193,8 +190,10 @@ public class TodoList implements Serializable {
             todoItemsList[indexOfTodoItemWithTitle].setCategory(updatedTodoItem.getCategory());
             todoItemsList[indexOfTodoItemWithTitle].setStartDate(updatedTodoItem.getStartDate());
             todoItemsList[indexOfTodoItemWithTitle].setEndDate(updatedTodoItem.getEndDate());
-
-
+            System.out.println("Mission is completed successfully");
+        }
+        else{
+            System.out.println("Mission is failed\nThe updated title is already exist");
         }
     }
     public TodoItem[] showAllItems() {
@@ -226,4 +225,4 @@ public class TodoList implements Serializable {
         }
     }
 }
->>>>>>> 9ecf62b948e0b309f1b36bee11c1530f04bae853
+
