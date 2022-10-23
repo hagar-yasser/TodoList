@@ -181,8 +181,12 @@ public class TodoList implements Serializable {
 
     public void updateItem(String title, TodoItem updatedTodoItem){
         int indexOfTodoItemWithTitle= getIndexOfTodoItemWithTitle(title);
+        boolean updatedTitleIsAlreadyExistBefore=(getIndexOfTodoItemWithTitle(updatedTodoItem.getTitle()) == indexOfTodoItemWithTitle)?false:true;
         if(indexOfTodoItemWithTitle==-1)
             System.out.println("This title " + title + "is not Found");
+        else if(updatedTitleIsAlreadyExistBefore){
+            System.out.println("Mission is failed\nThe updated title is already exist");
+        }
         else{
             todoItemsList[indexOfTodoItemWithTitle].setTitle(updatedTodoItem.getTitle());
             todoItemsList[indexOfTodoItemWithTitle].setDescription(updatedTodoItem.getDescription());
@@ -191,8 +195,6 @@ public class TodoList implements Serializable {
             todoItemsList[indexOfTodoItemWithTitle].setCategory(updatedTodoItem.getCategory());
             todoItemsList[indexOfTodoItemWithTitle].setStartDate(updatedTodoItem.getStartDate());
             todoItemsList[indexOfTodoItemWithTitle].setEndDate(updatedTodoItem.getEndDate());
-
-
         }
     }
     public TodoItem[] showAllItems() {
