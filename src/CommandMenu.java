@@ -146,7 +146,7 @@ public class CommandMenu {
             System.out.println("Couldn't add the todo item. Please try another title!");
     }
     private void printUpdateItemOptions(){
-        
+
 
     }
     private void printDeleteItemOptions() {
