@@ -24,7 +24,7 @@ public class CommandMenu {
                     printDeleteItemOptions();
                     break;
                 case "4":
-                    //show all items
+                    printShowAllItemsOptions();
                     break;
                 case "5":
                     printShowTopFiveByStartDate();
@@ -45,10 +45,10 @@ public class CommandMenu {
                     printTodoItemsByPriorityOptions();
                     break;
                 case "11":
-                    //print add item to category
+                    printAddTodoItemToCategoryOptions();
                     break;
                 case "12":
-                    //print add item to favourite
+                    printAddTodoItemToFavoriteOptions();
                     break;
                 case "0":
                     //exit
@@ -152,6 +152,18 @@ public class CommandMenu {
         else System.out.println("Couldn't Delete the todo item. Please make sure this title exists!");
     }
 
+    private void printShowAllItemsOptions(){
+        TodoItem[] todoList1 = todoList.showAllItems();
+        if(todoList1==null){
+            System.out.println("There's no todo to show ");
+        }
+        else{
+            for(int counter=0;counter<todoList1.length;counter++){
+                System.out.println(todoList1[counter].toString());
+            }
+        }
+
+    }
     private void printShowTopFiveByStartDate() {
         TodoItem[] todoListSortedAscendinglyByStartDate = todoList.sortAscendinglyByStartDate();
 
@@ -182,7 +194,11 @@ public class CommandMenu {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter The title you want to search about: ");
         String title = sc.nextLine();
-        System.out.println(todoList.searchByTitle(title));
+        if(todoList.searchByTitle(title) == null){
+            System.out.println("The item you search about doesn't exist in the list !!");
+        }else{
+            System.out.println(todoList.searchByTitle(title));
+        }
     }
 
     private void printTodoItemsByStartDateOptions() {
@@ -240,7 +256,7 @@ public class CommandMenu {
         while (missingPriority) {
             System.out.println("Enter the priority you want to search about:");
             try {
-                priority = sc.nextInt();
+                priority = Integer.parseInt(sc.nextLine());
                 if (priority < 1)
                     throw new Exception();
                 missingPriority = false;
@@ -257,6 +273,24 @@ public class CommandMenu {
                 System.out.println(listOfResult[i]);
             }
         }
+    }
+
+
+    private void printAddTodoItemToCategoryOptions(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the title of Todo you want to add to favourite ");
+        String title = sc.nextLine();
+        System.out.println("Enter the category of Todo you want to update");
+        String category = sc.nextLine();
+        todoList.addTodoItemToCategory(title,category);
+    }
+    private void printAddTodoItemToFavoriteOptions(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the title of Todo you want to add to favourite ");
+        String title = sc.nextLine();
+        todoList.addTodoItemToFavorite(title);
+
+
     }
 
 }
