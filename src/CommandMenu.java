@@ -146,8 +146,11 @@ public class CommandMenu {
             System.out.println("Couldn't add the todo item. Please try another title!");
     }
     private void printUpdateItemOptions(){
-
-
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the title of Todo you want to update ");
+        String title = sc.nextLine();
+        TodoItem updatedTodo = printTodoItemMenu();
+        todoList.updateItem(title,updatedTodo);
     }
     private void printDeleteItemOptions() {
         Scanner sc = new Scanner(System.in);
