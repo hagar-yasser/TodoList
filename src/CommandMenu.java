@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -20,7 +19,7 @@ public class CommandMenu {
                     printAddItemOptions();
                     break;
                 case "2":
-                    //print update item options
+                    printUpdateItemOptions();
                     break;
                 case "3":
                     printDeleteItemOptions();
@@ -80,20 +79,19 @@ public class CommandMenu {
 
 
     }
-
-    private void printAddItemOptions() {
+    private TodoItem printTodoItemMenu(){
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the title of the new todo item");
+        System.out.println("Enter the title of todo item");
         String title = sc.nextLine();
-        System.out.println("Enter the description of the new todo item");
+        System.out.println("Enter the description of todo item");
         String description = sc.nextLine();
-        System.out.println("Enter the category of the new todo item");
+        System.out.println("Enter the category of todo item");
         String category = sc.nextLine();
         //try and catch on priority
         boolean missingPriority = true;
         int priority = -1;
         while (missingPriority) {
-            System.out.println("Enter the priority of the new todo item (the highest the input the lowest the priority. Highest priority is 1)");
+            System.out.println("Enter the priority of todo item (the highest the input the lowest the priority. Highest priority is 1)");
             try {
                 priority = Integer.parseInt(sc.nextLine());
                 if (priority < 1)
@@ -130,20 +128,27 @@ public class CommandMenu {
                 System.out.println("Wrong End Date Format. Please enter the required end date format");
             }
         }
-        TodoItem newItem = new TodoItem();
-        newItem.setTitle(title);
-        newItem.setCategory(category);
-        newItem.setDescription(description);
-        newItem.setPriority(priority);
-        newItem.setStartDate(startDate);
-        newItem.setEndDate(endDate);
+        TodoItem todo = new TodoItem();
+        todo.setTitle(title);
+        todo.setCategory(category);
+        todo.setDescription(description);
+        todo.setPriority(priority);
+        todo.setStartDate(startDate);
+        todo.setEndDate(endDate);
+        return todo;
+    }
+    private void printAddItemOptions() {
+        TodoItem newItem = printTodoItemMenu();
         boolean added = todoList.addItem(newItem);
         if (added)
             System.out.println("Addition Operation Done");
         else
             System.out.println("Couldn't add the todo item. Please try another title!");
     }
+    private void printUpdateItemOptions(){
+        
 
+    }
     private void printDeleteItemOptions() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the title of the todo item you want to delete");
@@ -153,7 +158,6 @@ public class CommandMenu {
             System.out.println("Delete Operation Done");
         else System.out.println("Couldn't Delete the todo item. Please make sure this title exists!");
     }
-
     private void printShowAllItemsOptions(){
         TodoItem[] todoList1 = todoList.showAllItems();
         if(todoList1==null){
@@ -296,4 +300,4 @@ public class CommandMenu {
     }
 
 }
->>>>>>> 9ecf62b948e0b309f1b36bee11c1530f04bae853
+
