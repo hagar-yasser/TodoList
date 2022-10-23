@@ -2,7 +2,6 @@ import java.io.*;
 
 public class Main {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        System.out.println("Hello World !!!!!!!");
         TodoList todoList;
         BufferedReader br = new BufferedReader(new FileReader("myTodoList.txt"));
         if (br.readLine() == null) {
@@ -19,7 +18,7 @@ public class Main {
         CommandMenu commandMenu=new CommandMenu(todoList);
         commandMenu.executeFunctionFromTheCommandLine();
         FileOutputStream fileOutputStream
-                = new FileOutputStream("myTodoList.txt",true);
+                = new FileOutputStream("myTodoList.txt");
         ObjectOutputStream objectOutputStream
                 = new ObjectOutputStream(new BufferedOutputStream(fileOutputStream));
         objectOutputStream.writeObject(todoList);

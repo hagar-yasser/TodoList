@@ -8,7 +8,7 @@ public class TodoList implements Serializable {
     private TodoItem[] todoItemsList = new TodoItem[currentSizeOfTodoItemsList];
     private int indexOfLastItemInList = -1;
 
-    public void addItem(TodoItem todoItem) {
+    public boolean addItem(TodoItem todoItem) {
         //Check if title of new item already exists in array
         if (getIndexOfTodoItemWithTitle(todoItem.getTitle()) == -1) {
             //If the array is full duplicate its size
@@ -17,19 +17,23 @@ public class TodoList implements Serializable {
             }
             todoItemsList[indexOfLastItemInList + 1] = todoItem;
             indexOfLastItemInList++;
+            return true;
         }
+        return false;
     }
 
-    public void deleteItem(String title) {
+    public boolean deleteItem(String title) {
         int indexOfItemWithTitle = getIndexOfTodoItemWithTitle(title);
         if (indexOfItemWithTitle == -1)
-            return;
+            return false;
         todoItemsList[indexOfItemWithTitle] = null;
         //Shift items to the right of the deleted item to the left one step
         for (int i = indexOfItemWithTitle + 1; i <= indexOfLastItemInList; i++) {
             todoItemsList[i - 1] = todoItemsList[i];
         }
+        todoItemsList[indexOfLastItemInList]=null;
         indexOfLastItemInList -= 1;
+        return true;
 
     }
 
