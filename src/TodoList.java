@@ -195,6 +195,7 @@ public class TodoList implements Serializable {
             todoItemsList[indexOfTodoItemWithTitle].setCategory(updatedTodoItem.getCategory());
             todoItemsList[indexOfTodoItemWithTitle].setStartDate(updatedTodoItem.getStartDate());
             todoItemsList[indexOfTodoItemWithTitle].setEndDate(updatedTodoItem.getEndDate());
+            System.out.println("Mission is completed successfully");
         }
     }
     public TodoItem[] showAllItems() {
