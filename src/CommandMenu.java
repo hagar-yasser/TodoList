@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -296,4 +294,3 @@ public class CommandMenu {
     }
 
 }
->>>>>>> 9ecf62b948e0b309f1b36bee11c1530f04bae853
