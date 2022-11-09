@@ -12,7 +12,7 @@ public class ConnectionManager {
         try {
             Class.forName(driverName);
             try {
-                con = DriverManager.getConnection(urlstring, username, password);
+                con = DriverManager.getConnection(url, username, password);
                 System.out.println("Connected Successfully");
             } catch (SQLException ex) {
                 // log an exception. fro example:
