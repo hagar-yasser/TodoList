@@ -1,4 +1,7 @@
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -7,32 +10,42 @@ public class TodoList implements Serializable {
     private int currentSizeOfTodoItemsList = 100;
     private TodoItem[] todoItemsList = new TodoItem[currentSizeOfTodoItemsList];
     private int indexOfLastItemInList = -1;
+    private static String tableName = "TodoItem";
+    private static String titleColumnName="Title";
 
-    public boolean addItem(TodoItem todoItem) {
-        //Check if title of new item already exists in array
-        if (getIndexOfTodoItemWithTitle(todoItem.getTitle()) == -1) {
-            //If the array is full duplicate its size
-            if (indexOfLastItemInList == currentSizeOfTodoItemsList - 1) {
-                duplicateArraySize();
-            }
-            todoItemsList[indexOfLastItemInList + 1] = todoItem;
-            indexOfLastItemInList++;
-            return true;
+    public static boolean addItem(TodoItem todoItem)  {
+        Connection conn = ConnectionManager.getConnection();
+        try {
+            Statement stmt = conn.createStatement();
+
+            stmt.executeUpdate(String.format("INSERT INTO %s VALUES ('%s','%s','%s','%s','%s','%s','%s')",
+                    tableName, todoItem.getTitle(), todoItem.getDescription(),
+                    todoItem.getCategory(), todoItem.getPriority(),
+                    todoItem.getStartDate(), todoItem.getEndDate(), todoItem.getFavourite() ? 1 : 0));
         }
-        return false;
+        catch (SQLException s){
+            throw new RuntimeException(s);
+        }
+        finally {
+            ConnectionManager.closeConnection(conn);
+        }
+        return true;
     }
 
-    public boolean deleteItem(String title) {
-        int indexOfItemWithTitle = getIndexOfTodoItemWithTitle(title);
-        if (indexOfItemWithTitle == -1)
-            return false;
-        todoItemsList[indexOfItemWithTitle] = null;
-        //Shift items to the right of the deleted item to the left one step
-        for (int i = indexOfItemWithTitle + 1; i <= indexOfLastItemInList; i++) {
-            todoItemsList[i - 1] = todoItemsList[i];
+
+    public static boolean deleteItem(String title) {
+        Connection conn = ConnectionManager.getConnection();
+        try {
+            Statement stmt = conn.createStatement();
+
+            stmt.executeUpdate(String.format("DELETE FROM %s WHERE %s = '%s'",tableName,titleColumnName,title));
         }
-        todoItemsList[indexOfLastItemInList]=null;
-        indexOfLastItemInList -= 1;
+        catch (SQLException s){
+            throw new RuntimeException(s);
+        }
+        finally {
+            ConnectionManager.closeConnection(conn);
+        }
         return true;
 
     }
@@ -55,53 +68,17 @@ public class TodoList implements Serializable {
         todoItemsList = duplicateSizeTodoItemsList;
     }
 
-    public TodoItem[] sortAscendinglyByStartDate() {
+    public static TodoItem[] topFiveAscendinglyByStartDate() {
+        TodoItem[] topFiveItems=new TodoItem[0];
 
-        Arrays.sort(todoItemsList, new Comparator<TodoItem>() {
-                    @Override
-                    public int compare(TodoItem o1, TodoItem o2) {
-                        //if both are null or having the same reference then they are equal
-                        if (o1 == o2)
-                            return 0;
-                        //Move nulls to the right make them largest when compared to any other object
-                        if (o1 == null) {
-                            return 1;
-                        }
-                        if (o2 == null) {
-                            return -1;
-                        }
-                        //compare start dates
-                        return o1.getStartDate().compareTo(o2.getStartDate());
-
-                    }
-                }
-        );
-
-        return todoItemsList;
+        return topFiveItems;
     }
 
-    public TodoItem[] sortAscendinglyByEndDate() {
-        Arrays.sort(todoItemsList, new Comparator<TodoItem>() {
-                    @Override
-                    public int compare(TodoItem o1, TodoItem o2) {
-                        //if both are null or having the same reference then they are equal
-                        if (o1 == o2)
-                            return 0;
-                        //Move nulls to the right make them largest when compared to any other object
-                        if (o1 == null) {
-                            return 1;
-                        }
-                        if (o2 == null) {
-                            return -1;
-                        }
-                        //compare start dates
-                        return o1.getEndDate().compareTo(o2.getEndDate());
+    public static TodoItem[] topFiveAscendinglyByEndDate() {
+        TodoItem[] topFiveItems=new TodoItem[0];
 
-                    }
-                }
-        );
+        return topFiveItems;
 
-        return todoItemsList;
     }
 
     public TodoItem searchByTitle(String title) {
@@ -225,4 +202,4 @@ public class TodoList implements Serializable {
         }
     }
 }
-
+//

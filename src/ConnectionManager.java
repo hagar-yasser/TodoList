@@ -2,7 +2,7 @@ import java.sql.*;
 
 public class ConnectionManager {
     private static String url = "jdbc:mysql://localhost:3306/TodoList";
-    private static String driverName = "com.mysql.jdbc.Driver";
+    private static String driverName = "com.mysql.cj.jdbc.Driver";
     private static String username = "root";
     private static String password = "P@ssw0rd";
     private static Connection con;
@@ -12,7 +12,7 @@ public class ConnectionManager {
         try {
             Class.forName(driverName);
             try {
-                con = DriverManager.getConnection(urlstring, username, password);
+                con = DriverManager.getConnection(url, username, password);
                 System.out.println("Connected Successfully");
             } catch (SQLException ex) {
                 // log an exception. fro example:
@@ -24,4 +24,13 @@ public class ConnectionManager {
         }
         return con;
     }
+    public static void closeConnection(Connection conn){
+        try {
+            conn.close();
+            System.out.println("Connection closed successfully!");
+        } catch (SQLException e) {
+            System.err.println("Couldn't close connection");
+        }
+    }
+
 }

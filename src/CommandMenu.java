@@ -139,7 +139,7 @@ public class CommandMenu {
     }
     private void printAddItemOptions() {
         TodoItem newItem = printTodoItemMenu();
-        boolean added = todoList.addItem(newItem);
+        boolean added = TodoList.addItem(newItem);
         if (added)
             System.out.println("Addition Operation Done");
         else
@@ -163,7 +163,7 @@ public class CommandMenu {
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the title of the todo item you want to delete");
         String title = sc.nextLine();
-        boolean deleted = todoList.deleteItem(title);
+        boolean deleted = TodoList.deleteItem(title);
         if (deleted)
             System.out.println("Delete Operation Done");
         else System.out.println("Couldn't Delete the todo item. Please make sure this title exists!");
@@ -181,7 +181,7 @@ public class CommandMenu {
 
     }
     private void printShowTopFiveByStartDate() {
-        TodoItem[] todoListSortedAscendinglyByStartDate = todoList.sortAscendinglyByStartDate();
+        TodoItem[] todoListSortedAscendinglyByStartDate = TodoList.topFiveAscendinglyByStartDate();
 
         for (int i = 0; i < 5 && i < todoListSortedAscendinglyByStartDate.length; i++) {
             if (todoListSortedAscendinglyByStartDate[i] == null) {
@@ -194,7 +194,7 @@ public class CommandMenu {
     }
 
     private void printShowTopFiveByEndDate() {
-        TodoItem[] todoListSortedAscendinglyByEndDate = todoList.sortAscendinglyByEndDate();
+        TodoItem[] todoListSortedAscendinglyByEndDate = TodoList.topFiveAscendinglyByEndDate();
         ;
         for (int i = 0; i < 5 && i < todoListSortedAscendinglyByEndDate.length; i++) {
             if (todoListSortedAscendinglyByEndDate[i] == null) {
