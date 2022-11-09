@@ -24,4 +24,12 @@ public class ConnectionManager {
         }
         return con;
     }
+    public static void closeConnection(Connection conn){
+        try {
+            conn.close();
+            System.out.println("Connection closed successfully!");
+        } catch (SQLException e) {
+            System.err.println("Couldn't close connection");
+        }
+    }
 }

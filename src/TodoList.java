@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -7,6 +8,11 @@ public class TodoList implements Serializable {
     private int currentSizeOfTodoItemsList = 100;
     private TodoItem[] todoItemsList = new TodoItem[currentSizeOfTodoItemsList];
     private int indexOfLastItemInList = -1;
+    private static String tableName = "TodoItem";
+    private static String titleColumnName="Title";
+    private static String startDateColumnName="StartDate";
+    private static String endDateColumnName="EndDate";
+    private static String priorityColumnName="Priority";
 
     public boolean addItem(TodoItem todoItem) {
         //Check if title of new item already exists in array
@@ -105,77 +111,132 @@ public class TodoList implements Serializable {
     }
 
     public TodoItem searchByTitle(String title) {
-        for (int i = 0; i <= indexOfLastItemInList; i++) {
-            if (todoItemsList[i].getTitle().equals(title))
-                return todoItemsList[i];
+        TodoItem todoItem = new TodoItem();
+        Connection conn = ConnectionManager.getConnection();
+        try {
+            String sql = "select * from " + tableName + " where " + titleColumnName + "=" + title;
+            PreparedStatement p = conn.prepareStatement(sql);
+            ResultSet rs = p.executeQuery();
+            if (rs.next() == false){
+                return null;
+            }else{
+                while(rs.next()){
+                    todoItem.setTitle(rs.getString(1));
+                    todoItem.setDescription(rs.getString(2));
+                    todoItem.setCategory(rs.getString(3));
+                    todoItem.setPriority(Integer.parseInt(rs.getString(4)));
+                    todoItem.setStartDate(rs.getDate(5).toLocalDate());
+                    todoItem.setEndDate(rs.getDate(6).toLocalDate());
+                    todoItem.setFavourite(rs.getBoolean(7));
+            }
+            }
         }
-        return null;
+        catch (SQLException s){
+            throw new RuntimeException(s);
+        }
+        finally {
+            ConnectionManager.closeConnection(conn);
+        }
+        return todoItem;
     }
 
     public TodoItem[] searchByStartDate(LocalDate startDate) {
-        int sizeOfListOfResult = 0;
-        for (int i = 0; i <= indexOfLastItemInList; i++) {
-            if (todoItemsList[i].getStartDate().compareTo(startDate) == 0) {
-                sizeOfListOfResult++;
-            }
-        }
-        if(sizeOfListOfResult == 0){
-            return null;
-        }else{
-            TodoItem[] listOfResult = new TodoItem[sizeOfListOfResult];
-            int indexOfListOfResult = 0;
-            for (int j = 0; j <= indexOfLastItemInList; j++) {
-                if (todoItemsList[j].getStartDate().compareTo(startDate) == 0) {
-                    listOfResult[indexOfListOfResult] = todoItemsList[j];
+        TodoItem[] listOfResult;
+        Connection conn = ConnectionManager.getConnection();
+        try {
+            String sql = "select * from " + tableName + " where " + startDateColumnName + "=" + startDate;
+            PreparedStatement p = conn.prepareStatement(sql);
+            ResultSet rs = p.executeQuery();
+            if (rs.next() == false){
+                return null;
+            }else{
+                listOfResult = new TodoItem[rs.getInt("count(*)")];
+                int indexOfListOfResult = 0;
+                while(rs.next()){
+                    listOfResult[indexOfListOfResult].setTitle(rs.getString(1));
+                    listOfResult[indexOfListOfResult].setDescription(rs.getString(2));
+                    listOfResult[indexOfListOfResult].setCategory(rs.getString(3));
+                    listOfResult[indexOfListOfResult].setPriority(Integer.parseInt(rs.getString(4)));
+                    listOfResult[indexOfListOfResult].setStartDate(rs.getDate(5).toLocalDate());
+                    listOfResult[indexOfListOfResult].setEndDate(rs.getDate(6).toLocalDate());
+                    listOfResult[indexOfListOfResult].setFavourite(rs.getBoolean(7));
                     indexOfListOfResult++;
                 }
             }
-            return listOfResult;
         }
-    }
+        catch (SQLException s){
+            throw new RuntimeException(s);
+        }
+        finally {
+            ConnectionManager.closeConnection(conn);
+        }
+        return listOfResult;
+        }
 
     public TodoItem[] searchByEndDate(LocalDate endDate) {
-        int sizeOfListOfResult = 0;
-        for (int i = 0; i <= indexOfLastItemInList; i++) {
-            if (todoItemsList[i].getEndDate().compareTo(endDate) == 0) {
-                sizeOfListOfResult++;
-            }
-        }
-        if(sizeOfListOfResult == 0){
-            return null;
-        }else{
-            TodoItem[] listOfResult = new TodoItem[sizeOfListOfResult];
-            int indexOfListOfResult = 0;
-            for (int j = 0; j <= indexOfLastItemInList; j++) {
-                if (todoItemsList[j].getEndDate().compareTo(endDate) == 0) {
-                    listOfResult[indexOfListOfResult] = todoItemsList[j];
+        TodoItem[] listOfResult;
+        Connection conn = ConnectionManager.getConnection();
+        try {
+            String sql = "select * from " + tableName + " where " + endDateColumnName + "=" + endDate;
+            PreparedStatement p = conn.prepareStatement(sql);
+            ResultSet rs = p.executeQuery();
+            if (rs.next() == false){
+                return null;
+            }else{
+                listOfResult = new TodoItem[rs.getInt("count(*)")];
+                int indexOfListOfResult = 0;
+                while(rs.next()){
+                    listOfResult[indexOfListOfResult].setTitle(rs.getString(1));
+                    listOfResult[indexOfListOfResult].setDescription(rs.getString(2));
+                    listOfResult[indexOfListOfResult].setCategory(rs.getString(3));
+                    listOfResult[indexOfListOfResult].setPriority(Integer.parseInt(rs.getString(4)));
+                    listOfResult[indexOfListOfResult].setStartDate(rs.getDate(5).toLocalDate());
+                    listOfResult[indexOfListOfResult].setEndDate(rs.getDate(6).toLocalDate());
+                    listOfResult[indexOfListOfResult].setFavourite(rs.getBoolean(7));
                     indexOfListOfResult++;
                 }
             }
-            return listOfResult;
         }
+        catch (SQLException s){
+            throw new RuntimeException(s);
+        }
+        finally {
+            ConnectionManager.closeConnection(conn);
+        }
+        return listOfResult;
     }
 
     public TodoItem[] searchByPriority(int priority) {
-        int sizeOfListOfResult = 0;
-        for (int i = 0; i <= indexOfLastItemInList; i++) {
-            if (todoItemsList[i].getPriority() == priority) {
-                sizeOfListOfResult++;
-            }
-        }
-        if(sizeOfListOfResult == 0){
-            return null;
-        }else{
-            TodoItem[] listOfResult = new TodoItem[sizeOfListOfResult];
-            int indexOfListOfResult = 0;
-            for (int j = 0; j <= indexOfLastItemInList; j++) {
-                if (todoItemsList[j].getPriority() == priority) {
-                    listOfResult[indexOfListOfResult] = todoItemsList[j];
+        TodoItem[] listOfResult;
+        Connection conn = ConnectionManager.getConnection();
+        try {
+            String sql = "select * from " + tableName + " where " + priorityColumnName + "=" + priority;
+            PreparedStatement p = conn.prepareStatement(sql);
+            ResultSet rs = p.executeQuery();
+            if (rs.next() == false){
+                return null;
+            }else{
+                listOfResult = new TodoItem[rs.getInt("count(*)")];
+                int indexOfListOfResult = 0;
+                while(rs.next()){
+                    listOfResult[indexOfListOfResult].setTitle(rs.getString(1));
+                    listOfResult[indexOfListOfResult].setDescription(rs.getString(2));
+                    listOfResult[indexOfListOfResult].setCategory(rs.getString(3));
+                    listOfResult[indexOfListOfResult].setPriority(Integer.parseInt(rs.getString(4)));
+                    listOfResult[indexOfListOfResult].setStartDate(rs.getDate(5).toLocalDate());
+                    listOfResult[indexOfListOfResult].setEndDate(rs.getDate(6).toLocalDate());
+                    listOfResult[indexOfListOfResult].setFavourite(rs.getBoolean(7));
                     indexOfListOfResult++;
                 }
             }
-            return listOfResult;
         }
+        catch (SQLException s){
+            throw new RuntimeException(s);
+        }
+        finally {
+            ConnectionManager.closeConnection(conn);
+        }
+        return listOfResult;
     }
 
 
