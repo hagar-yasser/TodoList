@@ -2,7 +2,7 @@ import java.sql.*;
 
 public class ConnectionManager {
     private static String url = "jdbc:mysql://localhost:3306/TodoList";
-    private static String driverName = "com.mysql.jdbc.Driver";
+    private static String driverName = "com.mysql.cj.jdbc.Driver";
     private static String username = "root";
     private static String password = "P@ssw0rd";
     private static Connection con;
