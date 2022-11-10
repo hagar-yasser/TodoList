@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -8,31 +9,37 @@ public class TodoList implements Serializable {
     private TodoItem[] todoItemsList = new TodoItem[currentSizeOfTodoItemsList];
     private int indexOfLastItemInList = -1;
 
-    public boolean addItem(TodoItem todoItem) {
-        //Check if title of new item already exists in array
-        if (getIndexOfTodoItemWithTitle(todoItem.getTitle()) == -1) {
-            //If the array is full duplicate its size
-            if (indexOfLastItemInList == currentSizeOfTodoItemsList - 1) {
-                duplicateArraySize();
-            }
-            todoItemsList[indexOfLastItemInList + 1] = todoItem;
-            indexOfLastItemInList++;
-            return true;
-        }
-        return false;
+    private Connection conn;
+
+    public TodoList(Connection conn) {
+        this.conn = conn;
     }
 
-    public boolean deleteItem(String title) {
-        int indexOfItemWithTitle = getIndexOfTodoItemWithTitle(title);
-        if (indexOfItemWithTitle == -1)
+    public boolean addItem(TodoItem todoItem) {
+        try {
+            Statement stmt = conn.createStatement();
+
+            stmt.executeUpdate(String.format("INSERT INTO %s VALUES ('%s','%s','%s','%s','%s','%s','%s');",
+                    TodoItem.tableName, todoItem.getTitle(), todoItem.getDescription(),
+                    todoItem.getCategory(), todoItem.getPriority(),
+                    todoItem.getStartDate(), todoItem.getEndDate(), todoItem.getFavourite() ? 1 : 0));
+        } catch (SQLException s) {
+            s.printStackTrace();
             return false;
-        todoItemsList[indexOfItemWithTitle] = null;
-        //Shift items to the right of the deleted item to the left one step
-        for (int i = indexOfItemWithTitle + 1; i <= indexOfLastItemInList; i++) {
-            todoItemsList[i - 1] = todoItemsList[i];
         }
-        todoItemsList[indexOfLastItemInList]=null;
-        indexOfLastItemInList -= 1;
+        return true;
+    }
+
+
+    public boolean deleteItem(String title) {
+        try {
+            Statement stmt = conn.createStatement();
+
+            stmt.executeUpdate(String.format("DELETE FROM %s WHERE %s = '%s';", TodoItem.tableName, TodoItem.titleColumnName, title));
+        } catch (SQLException s) {
+            s.printStackTrace();
+            return false;
+        }
         return true;
 
     }
@@ -54,135 +61,155 @@ public class TodoList implements Serializable {
         currentSizeOfTodoItemsList *= 2;
         todoItemsList = duplicateSizeTodoItemsList;
     }
+    public TodoItem[] getArrayOfTodosFromResultSet(ResultSet rs) throws SQLException {
+        if (rs == null) {
+            return new TodoItem[0];
+        }
 
-    public TodoItem[] sortAscendinglyByStartDate() {
-
-        Arrays.sort(todoItemsList, new Comparator<TodoItem>() {
-                    @Override
-                    public int compare(TodoItem o1, TodoItem o2) {
-                        //if both are null or having the same reference then they are equal
-                        if (o1 == o2)
-                            return 0;
-                        //Move nulls to the right make them largest when compared to any other object
-                        if (o1 == null) {
-                            return 1;
-                        }
-                        if (o2 == null) {
-                            return -1;
-                        }
-                        //compare start dates
-                        return o1.getStartDate().compareTo(o2.getStartDate());
-
-                    }
-                }
-        );
-
-        return todoItemsList;
+        int size = 0;
+        rs.last();    // moves cursor to the last row
+        size = rs.getRow();// get row id
+        rs.beforeFirst();
+        TodoItem[]TodoItemsInResult = new TodoItem[size];
+        int index=0;
+        while (rs.next()) {
+            TodoItem row=new TodoItem();
+            row.setTitle(rs.getString(TodoItem.titleColumnName));
+            row.setDescription(rs.getString(TodoItem.descriptionColumnName));
+            row.setCategory(rs.getString(TodoItem.categoryColumnName));
+            row.setPriority(rs.getInt(TodoItem.priorityColumnName));
+            row.setStartDate(LocalDate.parse(rs.getString(TodoItem.startDateColumnName)));
+            row.setEndDate(LocalDate.parse(rs.getString(TodoItem.endDateColumnName)));
+            row.setFavourite(rs.getInt(TodoItem.isFavoriteColumnName) != 0);
+            TodoItemsInResult[index++]=row;
+        }
+        return TodoItemsInResult;
     }
 
-    public TodoItem[] sortAscendinglyByEndDate() {
-        Arrays.sort(todoItemsList, new Comparator<TodoItem>() {
-                    @Override
-                    public int compare(TodoItem o1, TodoItem o2) {
-                        //if both are null or having the same reference then they are equal
-                        if (o1 == o2)
-                            return 0;
-                        //Move nulls to the right make them largest when compared to any other object
-                        if (o1 == null) {
-                            return 1;
-                        }
-                        if (o2 == null) {
-                            return -1;
-                        }
-                        //compare start dates
-                        return o1.getEndDate().compareTo(o2.getEndDate());
+    public TodoItem[] topFiveAscendinglyByStartDate() {
+        TodoItem[] topFiveItems;
+        try {
+            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
-                    }
-                }
-        );
+            ResultSet rs = stmt.executeQuery(String.format("SELECT * FROM %s ORDER BY %s LIMIT 5;",
+                    TodoItem.tableName, TodoItem.startDateColumnName));
+           topFiveItems=getArrayOfTodosFromResultSet(rs);
 
-        return todoItemsList;
+        } catch (SQLException s) {
+            s.printStackTrace();
+            return new TodoItem[0];
+        }
+        return topFiveItems;
+    }
+
+
+    public TodoItem[] topFiveAscendinglyByEndDate() {
+        TodoItem[] topFiveItems;
+        try {
+            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            ResultSet rs = stmt.executeQuery(String.format("SELECT * FROM %s ORDER BY %s LIMIT 5;",
+                    TodoItem.tableName, TodoItem.endDateColumnName));
+            topFiveItems=getArrayOfTodosFromResultSet(rs);
+
+        } catch (SQLException s) {
+            s.printStackTrace();
+            return new TodoItem[0];
+        }
+        return topFiveItems;
+
     }
 
     public TodoItem searchByTitle(String title) {
-        for (int i = 0; i <= indexOfLastItemInList; i++) {
-            if (todoItemsList[i].getTitle().equals(title))
-                return todoItemsList[i];
+        TodoItem todoItem = new TodoItem();
+        try {
+            String sql = "select * from " + TodoItem.tableName + " where " + TodoItem.titleColumnName + "=" + "'"+title+"'";
+            PreparedStatement p = conn.prepareStatement(sql);
+            ResultSet rs = p.executeQuery();
+            if (rs.next() == false){
+                return null;
+            }else{
+                    todoItem.setTitle(rs.getString(1));
+                    todoItem.setDescription(rs.getString(2));
+                    todoItem.setCategory(rs.getString(3));
+                    todoItem.setPriority(Integer.parseInt(rs.getString(4)));
+                    todoItem.setStartDate(rs.getDate(5).toLocalDate());
+                    todoItem.setEndDate(rs.getDate(6).toLocalDate());
+                    todoItem.setFavourite(rs.getBoolean(7));
+            }
         }
-        return null;
+        catch (SQLException s){
+            s.printStackTrace();
+        }
+        return todoItem;
     }
 
     public TodoItem[] searchByStartDate(LocalDate startDate) {
-        int sizeOfListOfResult = 0;
-        for (int i = 0; i <= indexOfLastItemInList; i++) {
-            if (todoItemsList[i].getStartDate().compareTo(startDate) == 0) {
-                sizeOfListOfResult++;
+        TodoItem[] listOfResult;
+        try {
+            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            ResultSet rs = stmt.executeQuery(String.format("SELECT * FROM %s WHERE %s = '%s';",
+                    TodoItem.tableName, TodoItem.startDateColumnName,startDate));
+            if (rs.next() == false){
+                return null;
+            }else{
+                listOfResult = getArrayOfTodosFromResultSet(rs);
             }
         }
-        if(sizeOfListOfResult == 0){
-            return null;
-        }else{
-            TodoItem[] listOfResult = new TodoItem[sizeOfListOfResult];
-            int indexOfListOfResult = 0;
-            for (int j = 0; j <= indexOfLastItemInList; j++) {
-                if (todoItemsList[j].getStartDate().compareTo(startDate) == 0) {
-                    listOfResult[indexOfListOfResult] = todoItemsList[j];
-                    indexOfListOfResult++;
-                }
-            }
-            return listOfResult;
+        catch (SQLException s){
+            s.printStackTrace();
+            return new TodoItem[0];
         }
-    }
+        return listOfResult;
+        }
 
     public TodoItem[] searchByEndDate(LocalDate endDate) {
-        int sizeOfListOfResult = 0;
-        for (int i = 0; i <= indexOfLastItemInList; i++) {
-            if (todoItemsList[i].getEndDate().compareTo(endDate) == 0) {
-                sizeOfListOfResult++;
+        TodoItem[] listOfResult;
+        try {
+            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            ResultSet rs = stmt.executeQuery(String.format("SELECT * FROM %s WHERE %s = '%s';",
+                    TodoItem.tableName, TodoItem.endDateColumnName,endDate));
+            if (rs.next() == false){
+                return null;
+            }else{
+                listOfResult = getArrayOfTodosFromResultSet(rs);
             }
         }
-        if(sizeOfListOfResult == 0){
-            return null;
-        }else{
-            TodoItem[] listOfResult = new TodoItem[sizeOfListOfResult];
-            int indexOfListOfResult = 0;
-            for (int j = 0; j <= indexOfLastItemInList; j++) {
-                if (todoItemsList[j].getEndDate().compareTo(endDate) == 0) {
-                    listOfResult[indexOfListOfResult] = todoItemsList[j];
-                    indexOfListOfResult++;
-                }
-            }
-            return listOfResult;
+        catch (SQLException s){
+            s.printStackTrace();
+            return new TodoItem[0];
         }
+        return listOfResult;
     }
+
 
     public TodoItem[] searchByPriority(int priority) {
-        int sizeOfListOfResult = 0;
-        for (int i = 0; i <= indexOfLastItemInList; i++) {
-            if (todoItemsList[i].getPriority() == priority) {
-                sizeOfListOfResult++;
+        TodoItem[] listOfResult;
+        try {
+            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+            ResultSet rs = stmt.executeQuery(String.format("SELECT * FROM %s WHERE %s = '%s';",
+                    TodoItem.tableName, TodoItem.priorityColumnName,priority));
+            if (rs.next() == false){
+                return null;
+            }else{
+                listOfResult = getArrayOfTodosFromResultSet(rs);
             }
         }
-        if(sizeOfListOfResult == 0){
-            return null;
-        }else{
-            TodoItem[] listOfResult = new TodoItem[sizeOfListOfResult];
-            int indexOfListOfResult = 0;
-            for (int j = 0; j <= indexOfLastItemInList; j++) {
-                if (todoItemsList[j].getPriority() == priority) {
-                    listOfResult[indexOfListOfResult] = todoItemsList[j];
-                    indexOfListOfResult++;
-                }
-            }
-            return listOfResult;
+        catch (SQLException s){
+            s.printStackTrace();
+            return new TodoItem[0];
         }
+        return listOfResult;
     }
 
 
-    public void updateItem(String title, TodoItem updatedTodoItem){
-        int indexOfTodoItemWithTitle= getIndexOfTodoItemWithTitle(title);
-        if(getIndexOfTodoItemWithTitle(updatedTodoItem.getTitle()) == indexOfTodoItemWithTitle ||
-                getIndexOfTodoItemWithTitle(updatedTodoItem.getTitle()) == -1){
+    public void updateItem(String title, TodoItem updatedTodoItem) {
+        int indexOfTodoItemWithTitle = getIndexOfTodoItemWithTitle(title);
+        if (getIndexOfTodoItemWithTitle(updatedTodoItem.getTitle()) == indexOfTodoItemWithTitle ||
+                getIndexOfTodoItemWithTitle(updatedTodoItem.getTitle()) == -1) {
             todoItemsList[indexOfTodoItemWithTitle].setTitle(updatedTodoItem.getTitle());
             todoItemsList[indexOfTodoItemWithTitle].setDescription(updatedTodoItem.getDescription());
             todoItemsList[indexOfTodoItemWithTitle].setPriority(updatedTodoItem.getPriority());
@@ -191,23 +218,24 @@ public class TodoList implements Serializable {
             todoItemsList[indexOfTodoItemWithTitle].setStartDate(updatedTodoItem.getStartDate());
             todoItemsList[indexOfTodoItemWithTitle].setEndDate(updatedTodoItem.getEndDate());
             System.out.println("Mission is completed successfully");
-        }
-        else{
+        } else {
             System.out.println("Mission is failed\nThe updated title is already exist");
         }
     }
+
     public TodoItem[] showAllItems() {
-        if(indexOfLastItemInList==-1)
+        if (indexOfLastItemInList == -1)
             return null;
 
-        TodoItem[] actualListOfTodoItemsWithoutNulls = new TodoItem[indexOfLastItemInList+1];
-        for(int counter=0; counter<=indexOfLastItemInList;counter++)
+        TodoItem[] actualListOfTodoItemsWithoutNulls = new TodoItem[indexOfLastItemInList + 1];
+        for (int counter = 0; counter <= indexOfLastItemInList; counter++)
             actualListOfTodoItemsWithoutNulls[counter] = todoItemsList[counter];
         return actualListOfTodoItemsWithoutNulls;
     }
-    public void addTodoItemToCategory( String title, String category){
-        int indexOfTodoItemWithTitle= getIndexOfTodoItemWithTitle(title);
-        if(indexOfTodoItemWithTitle==-1)
+
+    public void addTodoItemToCategory(String title, String category) {
+        int indexOfTodoItemWithTitle = getIndexOfTodoItemWithTitle(title);
+        if (indexOfTodoItemWithTitle == -1)
             System.out.println("The todo with this title is not found\nThe mission is failed!!!!");
         else {
             todoItemsList[indexOfTodoItemWithTitle].setCategory(category);
@@ -215,9 +243,9 @@ public class TodoList implements Serializable {
         }
     }
 
-    public void addTodoItemToFavorite(String title){
-        int indexOfTodoItemWithTitle= getIndexOfTodoItemWithTitle(title);
-        if(indexOfTodoItemWithTitle==-1)
+    public void addTodoItemToFavorite(String title) {
+        int indexOfTodoItemWithTitle = getIndexOfTodoItemWithTitle(title);
+        if (indexOfTodoItemWithTitle == -1)
             System.out.println("The todo with this title is not found\nThe mission is failed!!!!");
         else {
             todoItemsList[indexOfTodoItemWithTitle].setFavourite(true);
@@ -225,4 +253,4 @@ public class TodoList implements Serializable {
         }
     }
 }
-
+//
