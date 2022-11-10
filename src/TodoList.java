@@ -1,8 +1,6 @@
 import java.io.Serializable;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Comparator;
 
 public class TodoList implements Serializable {
     private int currentSizeOfTodoItemsList = 100;
@@ -215,7 +213,7 @@ public class TodoList implements Serializable {
             try {
                 Statement statement = conn.createStatement();
                 String query = "UPDATE TodoItem SET  Description =\""+ updatedTodoItem.getDescription()+"\" , Category =\""+updatedTodoItem.getCategory()+"\" , Priority = \""+updatedTodoItem.getPriority()+"\" , StartDate = \""+updatedTodoItem.getStartDate()+"\" , EndDate = \""+updatedTodoItem.getEndDate()+"\" WHERE Title LIKE \""+title+"%\" ;";
-               statement.executeUpdate(query);
+                statement.executeUpdate(query);
                 System.out.println("Todo's updated successfully");
             }
             catch  (SQLException e) {
@@ -225,13 +223,20 @@ public class TodoList implements Serializable {
     }
 
     public TodoItem[] showAllItems() {
-        if (indexOfLastItemInList == -1)
-            return null;
+        TodoItem[] todoList;
+        try {
+            Statement statement = conn.createStatement();
+            String query ="SELECT * FROM TodoItem ;";
+            ResultSet resultSet=statement.executeQuery(query);
+            todoList = getArrayOfTodosFromResultSet(resultSet);
+            return todoList;
 
-        TodoItem[] actualListOfTodoItemsWithoutNulls = new TodoItem[indexOfLastItemInList + 1];
-        for (int counter = 0; counter <= indexOfLastItemInList; counter++)
-            actualListOfTodoItemsWithoutNulls[counter] = todoItemsList[counter];
-        return actualListOfTodoItemsWithoutNulls;
+        }
+        catch  (SQLException e) {
+            e.printStackTrace();
+            }
+
+        return null;
     }
 
     public void addTodoItemToCategory(String title, String category) {
