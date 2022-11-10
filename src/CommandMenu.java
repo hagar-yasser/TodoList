@@ -181,7 +181,7 @@ public class CommandMenu {
 
     }
     private void printShowTopFiveByStartDate() {
-        TodoItem[] todoListSortedAscendinglyByStartDate = todoList.sortAscendinglyByStartDate();
+        TodoItem[] todoListSortedAscendinglyByStartDate = todoList.topFiveAscendinglyByStartDate();
 
         for (int i = 0; i < 5 && i < todoListSortedAscendinglyByStartDate.length; i++) {
             if (todoListSortedAscendinglyByStartDate[i] == null) {
@@ -194,7 +194,7 @@ public class CommandMenu {
     }
 
     private void printShowTopFiveByEndDate() {
-        TodoItem[] todoListSortedAscendinglyByEndDate = todoList.sortAscendinglyByEndDate();
+        TodoItem[] todoListSortedAscendinglyByEndDate = todoList.topFiveAscendinglyByEndDate();
         ;
         for (int i = 0; i < 5 && i < todoListSortedAscendinglyByEndDate.length; i++) {
             if (todoListSortedAscendinglyByEndDate[i] == null) {
