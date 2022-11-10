@@ -32,5 +32,4 @@ public class ConnectionManager {
             System.err.println("Couldn't close connection");
         }
     }
-
 }
