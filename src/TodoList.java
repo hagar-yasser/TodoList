@@ -258,12 +258,20 @@ public class TodoList implements Serializable {
     }
 
     public void addTodoItemToFavorite(String title) {
-        int indexOfTodoItemWithTitle = getIndexOfTodoItemWithTitle(title);
-        if (indexOfTodoItemWithTitle == -1)
-            System.out.println("The todo with this title is not found\nThe mission is failed!!!!");
-        else {
-            todoItemsList[indexOfTodoItemWithTitle].setFavourite(true);
-            System.out.println("Mission is completed successfully ");
+        TodoItem todoItem = searchByTitle(title);
+        if(todoItem==null) {
+            System.out.println("Todo's not found");
+        }
+        else{
+            try {
+                Statement statement = conn.createStatement();
+                String query = "UPDATE TodoItem SET   IsFavorite = 1  WHERE Title LIKE \""+title+"%\" ;";
+                statement.executeUpdate(query);
+                System.out.println("Todo's updated successfully");
+            }
+            catch  (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
