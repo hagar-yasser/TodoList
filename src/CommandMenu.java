@@ -6,6 +6,7 @@ public class CommandMenu {
     private TodoList todoList;
 
     public CommandMenu(TodoList todoList) {
+
         this.todoList = todoList;
     }
 
