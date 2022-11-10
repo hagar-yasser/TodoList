@@ -207,19 +207,20 @@ public class TodoList implements Serializable {
 
 
     public void updateItem(String title, TodoItem updatedTodoItem) {
-        int indexOfTodoItemWithTitle = getIndexOfTodoItemWithTitle(title);
-        if (getIndexOfTodoItemWithTitle(updatedTodoItem.getTitle()) == indexOfTodoItemWithTitle ||
-                getIndexOfTodoItemWithTitle(updatedTodoItem.getTitle()) == -1) {
-            todoItemsList[indexOfTodoItemWithTitle].setTitle(updatedTodoItem.getTitle());
-            todoItemsList[indexOfTodoItemWithTitle].setDescription(updatedTodoItem.getDescription());
-            todoItemsList[indexOfTodoItemWithTitle].setPriority(updatedTodoItem.getPriority());
-            todoItemsList[indexOfTodoItemWithTitle].setFavourite(updatedTodoItem.getFavourite());
-            todoItemsList[indexOfTodoItemWithTitle].setCategory(updatedTodoItem.getCategory());
-            todoItemsList[indexOfTodoItemWithTitle].setStartDate(updatedTodoItem.getStartDate());
-            todoItemsList[indexOfTodoItemWithTitle].setEndDate(updatedTodoItem.getEndDate());
-            System.out.println("Mission is completed successfully");
-        } else {
-            System.out.println("Mission is failed\nThe updated title is already exist");
+        TodoItem todoItem = searchByTitle(title);
+        if(todoItem==null) {
+            System.out.println("Todo's not found");
+        }
+        else{
+            try {
+                Statement statement = conn.createStatement();
+                String query = "UPDATE TodoItem SET  Description =\""+ updatedTodoItem.getDescription()+"\" , Category =\""+updatedTodoItem.getCategory()+"\" , Priority = \""+updatedTodoItem.getPriority()+"\" , StartDate = \""+updatedTodoItem.getStartDate()+"\" , EndDate = \""+updatedTodoItem.getEndDate()+"\" WHERE Title LIKE \""+title+"%\" ;";
+               statement.executeUpdate(query);
+                System.out.println("Todo's updated successfully");
+            }
+            catch  (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
