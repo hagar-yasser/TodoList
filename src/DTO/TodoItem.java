@@ -1,3 +1,5 @@
+package DTO;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -9,14 +11,14 @@ public class TodoItem implements Serializable {
     private LocalDate startDate;
     private LocalDate endDate;
     private boolean favourite=false;
-    static String tableName = "TodoItem";
-    static String titleColumnName = "Title";
-    static String startDateColumnName = "StartDate";
-    static String endDateColumnName = "EndDate";
-    static String descriptionColumnName="Description";
-    static String categoryColumnName="Category";
-    static String priorityColumnName="Priority";
-    static String isFavoriteColumnName="IsFavorite";
+    public static String tableName = "TodoItem";
+    public static String titleColumnName = "Title";
+    public static String startDateColumnName = "StartDate";
+    public static String endDateColumnName = "EndDate";
+    public static String descriptionColumnName="Description";
+    public static String categoryColumnName="Category";
+    public static String priorityColumnName="Priority";
+    public static String isFavoriteColumnName="IsFavorite";
 
 
     public String getTitle() {

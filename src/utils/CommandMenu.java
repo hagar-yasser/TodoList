@@ -1,9 +1,16 @@
+package utils;
+
+import DTO.TodoItem;
+import repository.TodoList;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class CommandMenu {
     private TodoList todoList;
+    private static final int highPriority=1;
+    private static final int lowPriority=3;
 
     public CommandMenu(TodoList todoList) {
 
@@ -92,13 +99,17 @@ public class CommandMenu {
         boolean missingPriority = true;
         int priority = -1;
         while (missingPriority) {
-            System.out.println("Enter the priority of todo item (the highest the input the lowest the priority. Highest priority is 1)");
+            System.out.println("Enter the priority of todo item \n"+
+                    "1- HIGH PRIORITY\n"+
+                    "2- MEDIUM PRIORITY\n"+
+                    "3- LOW PRIORITY");
+
             try {
                 priority = Integer.parseInt(sc.nextLine());
-                if (priority < 1)
-                    throw new Exception();
+                if (priority < highPriority||priority>lowPriority)
+                    throw new NumberFormatException();
                 missingPriority = false;
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 System.out.println("Try again. Enter a correct priority number");
             }
         }
@@ -110,7 +121,7 @@ public class CommandMenu {
             try {
                 startDate = LocalDate.parse(sc.nextLine());
                 missingStartDate = false;
-            } catch (Exception e) {
+            } catch (DateTimeParseException e) {
                 System.out.println("Wrong Start Date Format. Please enter the required start date format");
             }
         }
@@ -125,7 +136,7 @@ public class CommandMenu {
                     System.out.println("End Date cannot be before the start Date");
                 } else
                     missingEndDate = false;
-            } catch (Exception e) {
+            } catch (DateTimeParseException e) {
                 System.out.println("Wrong End Date Format. Please enter the required end date format");
             }
         }
@@ -227,7 +238,7 @@ public class CommandMenu {
             try {
                 startDate = LocalDate.parse(sc.nextLine());
                 missingStartDate = false;
-            } catch (Exception e) {
+            } catch (DateTimeParseException e) {
                 System.out.println("Wrong Start Date Format. Please enter the required start date format");
             }
         }
@@ -251,7 +262,7 @@ public class CommandMenu {
             try {
                 endDate = LocalDate.parse(sc.nextLine());
                 missingEndDate = false;
-            } catch (Exception e) {
+            } catch (DateTimeParseException e) {
                 System.out.println("Wrong End Date Format. Please enter the required end date format");
             }
         }
@@ -274,10 +285,10 @@ public class CommandMenu {
             System.out.println("Enter the priority you want to search about:");
             try {
                 priority = Integer.parseInt(sc.nextLine());
-                if (priority < 1)
-                    throw new Exception();
+                if (priority < highPriority||priority>lowPriority)
+                    throw new NumberFormatException();
                 missingPriority = false;
-            } catch (Exception e) {
+            } catch (NumberFormatException e) {
                 System.out.println("Try again. Enter a correct priority number");
             }
         }

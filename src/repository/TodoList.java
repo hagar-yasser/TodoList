@@ -1,6 +1,11 @@
+package repository;
+
+import DTO.TodoItem;
+
 import java.io.Serializable;
 import java.sql.*;
 import java.time.LocalDate;
+
 
 public class TodoList implements Serializable {
     private int currentSizeOfTodoItemsList = 100;
@@ -211,7 +216,7 @@ public class TodoList implements Serializable {
         }
         else{
             try {
-                Statement statement = conn.createStatement();
+                Statement statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 String query = "UPDATE TodoItem SET  Description =\""+ updatedTodoItem.getDescription()+"\" , Category =\""+updatedTodoItem.getCategory()+"\" , Priority = \""+updatedTodoItem.getPriority()+"\" , StartDate = \""+updatedTodoItem.getStartDate()+"\" , EndDate = \""+updatedTodoItem.getEndDate()+"\" WHERE Title LIKE \""+title+"%\" ;";
                 statement.executeUpdate(query);
                 System.out.println("Todo's updated successfully");
@@ -225,7 +230,7 @@ public class TodoList implements Serializable {
     public TodoItem[] showAllItems() {
         TodoItem[] todoList;
         try {
-            Statement statement = conn.createStatement();
+            Statement statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             String query ="SELECT * FROM TodoItem ;";
             ResultSet resultSet=statement.executeQuery(query);
             todoList = getArrayOfTodosFromResultSet(resultSet);
