@@ -2,7 +2,7 @@
 ## How to run the task
 * Write the next commands in terminal 
   ```
-  git clone https://github.com/hagar-yasser/TodoList.git
+  git clone -b Dev https://github.com/hagar-yasser/TodoList.git
 
   ```
 * Open Workbench then 
