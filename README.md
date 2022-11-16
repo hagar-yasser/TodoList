@@ -7,6 +7,7 @@
   ```
 * Open Workbench then 
   * Connect to server localhost:3306
+  * From 'File' choose 'Open SQL Script' then choose 'TodoList-DB.sql' from 'TodoList' project
   * Type this query
      ```
      
