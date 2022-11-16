@@ -5,7 +5,7 @@
   git clone https://github.com/hagar-yasser/TodoList.git
 
   ```
-* Open Workbanch then 
+* Open Workbench then 
   * Connect to server localhost:3306
   * Type this query
      ```
