@@ -15,10 +15,6 @@ public class CommandMenu {
     private static final int highPriority=1;
     private static final int lowPriority=3;
 
-    public CommandMenu(TodoList todoList) {
-
-        this.todoList = todoList;
-    }
     //empty constructor so that the jersey servlet can initiate the CommandMenu Object
     public CommandMenu(){}
 
@@ -167,88 +163,47 @@ public class CommandMenu {
         return todoList.topFiveAscendinglyByEndDate();
     }
 
-    private void printTodoItemsByTitleOptions() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter The title you want to search about: ");
-        String title = sc.nextLine();
+    @GET
+    @Path("/searchByTitle/{title}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response printTodoItemsByTitle(@PathParam("title")String title) {
         if(todoList.searchByTitle(title) == null){
-            System.out.println("The item you search about doesn't exist in the list !!");
+            return Response.status(400,"Couldn't search in the todo item. Please make sure that this title exists!").build();
         }else{
-            System.out.println(todoList.searchByTitle(title));
+            return Response.ok(todoList.searchByTitle(title)).build();
         }
     }
 
-    private void printTodoItemsByStartDateOptions() {
-        Scanner sc = new Scanner(System.in);
-        LocalDate startDate = null;
-        boolean missingStartDate = true;
-        while (missingStartDate) {
-            System.out.println("Enter the start date of the todo item you want to search about in the following format yyyy-mm-dd");
-            try {
-                startDate = LocalDate.parse(sc.nextLine());
-                missingStartDate = false;
-            } catch (DateTimeParseException e) {
-                System.out.println("Wrong Start Date Format. Please enter the required start date format");
-            }
-        }
+    @GET
+    @Path("/searchByStartDate/{startDate}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response printTodoItemsByStartDate(@PathParam("startDate")LocalDate startDate) {
         if (todoList.searchByStartDate(startDate) == null) {
-            System.out.println("The item you search about doesn't exist in the list !!");
+           return Response.status(400,"Couldn't search in the todo item. Please make sure that this start date exists!").build();
         } else {
-            TodoItem[] listOfResult = todoList.searchByStartDate(startDate);
-            System.out.println("The result after searching: ");
-            for (int i = 0; i < listOfResult.length; i++) {
-                System.out.println(listOfResult[i]);
-            }
+            return Response.ok(todoList.searchByStartDate(startDate)).build();
         }
     }
 
-    private void printTodoItemsByEndDateOptions() {
-        Scanner sc = new Scanner(System.in);
-        LocalDate endDate = null;
-        boolean missingEndDate = true;
-        while (missingEndDate) {
-            System.out.println("Enter the end date of the todo item you want to search about in the following format yyyy-mm-dd");
-            try {
-                endDate = LocalDate.parse(sc.nextLine());
-                missingEndDate = false;
-            } catch (DateTimeParseException e) {
-                System.out.println("Wrong End Date Format. Please enter the required end date format");
-            }
-        }
+    @GET
+    @Path("/searchByEndDate/{endDate}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response printTodoItemsByEndDate(@PathParam("endDate")LocalDate endDate) {
         if (todoList.searchByEndDate(endDate) == null) {
-            System.out.println("The item you search about doesn't exist in the list !!");
+            return Response.status(400,"Couldn't search in the todo item. Please make sure that this end date exists!").build();
         } else {
-            TodoItem[] listOfResult = todoList.searchByEndDate(endDate);
-            System.out.println("The result after searching: ");
-            for (int i = 0; i < listOfResult.length; i++) {
-                System.out.println(listOfResult[i]);
-            }
+            return Response.ok(todoList.searchByEndDate(endDate)).build();
         }
     }
 
-    private void printTodoItemsByPriorityOptions() {
-        Scanner sc = new Scanner(System.in);
-        boolean missingPriority = true;
-        int priority = -1;
-        while (missingPriority) {
-            System.out.println("Enter the priority you want to search about:");
-            try {
-                priority = Integer.parseInt(sc.nextLine());
-                if (priority < highPriority||priority>lowPriority)
-                    throw new NumberFormatException();
-                missingPriority = false;
-            } catch (NumberFormatException e) {
-                System.out.println("Try again. Enter a correct priority number");
-            }
-        }
+    @GET
+    @Path("/searchPriority/{priority}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response printTodoItemsByPriority(@PathParam("priority")int priority) {
         if (todoList.searchByPriority(priority) == null) {
-            System.out.println("The item you search about doesn't exist in the list !!");
+            return Response.status(400,"Couldn't search in the todo item. Please make sure that this priority exists!").build();
         } else {
-            TodoItem[] listOfResult = todoList.searchByPriority(priority);
-            System.out.println("The result after searching: ");
-            for (int i = 0; i < listOfResult.length; i++) {
-                System.out.println(listOfResult[i]);
-            }
+            return Response.ok(todoList.searchByPriority(priority)).build();
         }
     }
 

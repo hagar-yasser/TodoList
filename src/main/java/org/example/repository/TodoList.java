@@ -143,6 +143,7 @@ public class TodoList implements Serializable {
 
     public TodoItem searchByTitle(String title) {
         TodoItem todoItem = new TodoItem();
+        conn=ConnectionManager.getConnection();
         try {
             String sql = "select * from " + TodoItem.tableName + " where " + TodoItem.titleColumnName + "=" + "'"+title+"'";
             PreparedStatement p = conn.prepareStatement(sql);
@@ -161,12 +162,15 @@ public class TodoList implements Serializable {
         }
         catch (SQLException s){
             s.printStackTrace();
+        }finally {
+            ConnectionManager.closeConnection();
         }
         return todoItem;
     }
 
     public TodoItem[] searchByStartDate(LocalDate startDate) {
         TodoItem[] listOfResult;
+        conn=ConnectionManager.getConnection();
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -181,12 +185,15 @@ public class TodoList implements Serializable {
         catch (SQLException s){
             s.printStackTrace();
             return new TodoItem[0];
+        }finally {
+            ConnectionManager.closeConnection();
         }
         return listOfResult;
         }
 
     public TodoItem[] searchByEndDate(LocalDate endDate) {
         TodoItem[] listOfResult;
+        conn= ConnectionManager.getConnection();
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -201,6 +208,8 @@ public class TodoList implements Serializable {
         catch (SQLException s){
             s.printStackTrace();
             return new TodoItem[0];
+        }finally {
+            ConnectionManager.closeConnection();
         }
         return listOfResult;
     }
@@ -208,6 +217,7 @@ public class TodoList implements Serializable {
 
     public TodoItem[] searchByPriority(int priority) {
         TodoItem[] listOfResult;
+        conn = ConnectionManager.getConnection();
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -222,6 +232,8 @@ public class TodoList implements Serializable {
         catch (SQLException s){
             s.printStackTrace();
             return new TodoItem[0];
+        }finally {
+            ConnectionManager.closeConnection();
         }
         return listOfResult;
     }
