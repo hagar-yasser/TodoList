@@ -1,8 +1,7 @@
-import repository.TodoList;
-import utils.CommandMenu;
-import utils.ConnectionManager;
+import org.example.repository.TodoList;
+import org.example.controller.CommandMenu;
+import org.example.utils.ConnectionManager;
 
-import java.io.*;
 import java.sql.*;
 
 public class Main {

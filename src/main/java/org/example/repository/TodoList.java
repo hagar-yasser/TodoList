@@ -1,6 +1,6 @@
-package repository;
+package org.example.repository;
 
-import DTO.TodoItem;
+import org.example.DTO.TodoItem;
 
 import java.io.Serializable;
 import java.sql.*;
