@@ -33,9 +33,10 @@ public class ConnectionManager {
         }
         return con;
     }
-    public static void closeConnection(Connection conn){
+    public static void closeConnection(){
         try {
-            conn.close();
+            con.close();
+            con=null;
             System.out.println("Connection closed successfully!");
         } catch (SQLException e) {
             System.err.println("Couldn't close connection");

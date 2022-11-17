@@ -1,14 +1,17 @@
 package org.example.controller;
 
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.example.DTO.TodoItem;
 import org.example.repository.TodoList;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
-
+@Path("/")
 public class CommandMenu {
-    private TodoList todoList;
+    private TodoList todoList=new TodoList();
     private static final int highPriority=1;
     private static final int lowPriority=3;
 
@@ -16,77 +19,9 @@ public class CommandMenu {
 
         this.todoList = todoList;
     }
+    //empty constructor so that the jersey servlet can initiate the CommandMenu Object
+    public CommandMenu(){}
 
-    public void executeFunctionFromTheCommandLine() {
-        while (true) {
-            printMainMenu();
-            Scanner sc = new Scanner(System.in);
-            String command = sc.nextLine();
-            switch (command) {
-                case "1":
-                    printAddItemOptions();
-                    break;
-                case "2":
-                    printUpdateItemOptions();
-                    break;
-                case "3":
-                    printDeleteItemOptions();
-                    break;
-                case "4":
-                    printShowAllItemsOptions();
-                    break;
-                case "5":
-                    printShowTopFiveByStartDate();
-                    break;
-                case "6":
-                    printShowTopFiveByEndDate();
-                    break;
-                case "7":
-                    printTodoItemsByTitleOptions();
-                    break;
-                case "8":
-                    printTodoItemsByStartDateOptions();
-                    break;
-                case "9":
-                    printTodoItemsByEndDateOptions();
-                    break;
-                case "10":
-                    printTodoItemsByPriorityOptions();
-                    break;
-                case "11":
-                    printAddTodoItemToCategoryOptions();
-                    break;
-                case "12":
-                    printAddTodoItemToFavoriteOptions();
-                    break;
-                case "0":
-                    //exit
-                    return;
-
-                default:
-                    System.out.println("Wrong input. Please enter a valid input");
-            }
-        }
-    }
-
-    private void printMainMenu() {
-        System.out.println("Type the number of the command you want to perform and press enter.");
-        System.out.println("1- Add Item to the todo List");
-        System.out.println("2- Update an Item in the todo List");
-        System.out.println("3 - Delete Item from the todo List");
-        System.out.println("4- Show all Items in the Todo List");
-        System.out.println("5- Show Top Five Items in the Todo List by Start Date");
-        System.out.println("6- Show Top Five Items in the Todo List by End Date");
-        System.out.println("7- Search for Items in the Todo List by Title");
-        System.out.println("8- Search for Items in the Todo List by Start Date");
-        System.out.println("9- Search for Items in the Todo List by End Date");
-        System.out.println("10- Search for Items in the Todo List by Priority");
-        System.out.println("11- Add Item to a Category");
-        System.out.println("12- Add Item to Favourites");
-        System.out.println("0- exit");
-
-
-    }
     private TodoItem printTodoItemMenu(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter the title of todo item");
@@ -149,13 +84,40 @@ public class CommandMenu {
         todo.setEndDate(endDate);
         return todo;
     }
-    private void printAddItemOptions() {
-        TodoItem newItem = printTodoItemMenu();
+    private Response isValidTodoItem(TodoItem todoItem){
+        if(todoItem.getTitle()==null) {
+            return Response.status(400,"title cannot be empty").build();
+        }
+        if (todoItem.getPriority() < highPriority||todoItem.getPriority()>lowPriority){
+            return  Response.status(400,"priority has to be >=1 and <=3").build();
+        }
+        if(todoItem.getStartDate()==null){
+            return  Response.status(400,"startDate cannot be empty").build();
+        }
+        if(todoItem.getEndDate()==null){
+            return  Response.status(400,"endDate cannot be empty").build();
+        }
+        if(todoItem.getEndDate().compareTo(todoItem.getStartDate())<0)
+            return  Response.status(400,"endDate has to be >= startDate").build();
+        return Response.status(200).build();
+
+    }
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/todoItem")
+    public Response printAddItemOptions(TodoItem newItem) {
+        Response validTodoItem=isValidTodoItem(newItem);
+        if(validTodoItem.getStatus()!=200){
+            return validTodoItem;
+        }
         boolean added = todoList.addItem(newItem);
-        if (added)
+        if (added) {
             System.out.println("Addition Operation Done");
+            return Response.status(200,"Addition Operation Done").build();
+        }
         else
-            System.out.println("Couldn't add the todo item. Please try another title!");
+           return Response.status(400,"Couldn't add the todo item. Please try another title!").build();
     }
     private void printUpdateItemOptions(){
         Scanner sc = new Scanner(System.in);
@@ -171,14 +133,14 @@ public class CommandMenu {
             todoList.updateItem(title, updatedTodo);
         }
     }
-    private void printDeleteItemOptions() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the title of the todo item you want to delete");
-        String title = sc.nextLine();
+    @DELETE
+    @Path("/todoItem/{title}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response printDeleteItemOptions(@PathParam("title")String title) {
         boolean deleted = todoList.deleteItem(title);
         if (deleted)
-            System.out.println("Delete Operation Done");
-        else System.out.println("Couldn't Delete the todo item. Please make sure this title exists!");
+            return Response.status(200,"Delete Operation Done").build();
+        else return Response.status(400,"Couldn't Delete the todo item. Please make sure this title exists!").build();
     }
     private void printShowAllItemsOptions(){
         TodoItem[] todoList1 = todoList.showAllItems();
@@ -192,30 +154,17 @@ public class CommandMenu {
         }
 
     }
-    private void printShowTopFiveByStartDate() {
-        TodoItem[] todoListSortedAscendinglyByStartDate = todoList.topFiveAscendinglyByStartDate();
-
-        for (int i = 0; i < 5 && i < todoListSortedAscendinglyByStartDate.length; i++) {
-            if (todoListSortedAscendinglyByStartDate[i] == null) {
-                System.out.println("The above items are the only items in the todoList");
-                break;
-            }
-            System.out.println(todoListSortedAscendinglyByStartDate[i]);
-
-        }
+    @GET
+    @Path("/topFiveItemsByStartDate")
+    @Produces(MediaType.APPLICATION_JSON)
+    public TodoItem[] printShowTopFiveByStartDate() {
+        return todoList.topFiveAscendinglyByStartDate();
     }
-
-    private void printShowTopFiveByEndDate() {
-        TodoItem[] todoListSortedAscendinglyByEndDate = todoList.topFiveAscendinglyByEndDate();
-        ;
-        for (int i = 0; i < 5 && i < todoListSortedAscendinglyByEndDate.length; i++) {
-            if (todoListSortedAscendinglyByEndDate[i] == null) {
-                System.out.println("The above items are the only items in the todoList");
-                break;
-            }
-            System.out.println(todoListSortedAscendinglyByEndDate[i]);
-
-        }
+    @GET
+    @Path("/topFiveItemsByEndDate")
+    @Produces(MediaType.APPLICATION_JSON)
+    public TodoItem[] printShowTopFiveByEndDate() {
+        return todoList.topFiveAscendinglyByEndDate();
     }
 
     private void printTodoItemsByTitleOptions() {

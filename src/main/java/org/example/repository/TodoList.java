@@ -1,6 +1,7 @@
 package org.example.repository;
 
 import org.example.DTO.TodoItem;
+import org.example.utils.ConnectionManager;
 
 import java.io.Serializable;
 import java.sql.*;
@@ -14,11 +15,12 @@ public class TodoList implements Serializable {
 
     private Connection conn;
 
-    public TodoList(Connection conn) {
-        this.conn = conn;
+    public TodoList() {
+
     }
 
     public boolean addItem(TodoItem todoItem) {
+        conn= ConnectionManager.getConnection();
         try {
             Statement stmt = conn.createStatement();
 
@@ -30,11 +32,16 @@ public class TodoList implements Serializable {
             s.printStackTrace();
             return false;
         }
+        finally {
+            ConnectionManager.closeConnection();
+        }
         return true;
+
     }
 
 
     public boolean deleteItem(String title) {
+        conn=ConnectionManager.getConnection();
         try {
             Statement stmt = conn.createStatement();
 
@@ -42,6 +49,9 @@ public class TodoList implements Serializable {
         } catch (SQLException s) {
             s.printStackTrace();
             return false;
+        }
+        finally {
+            ConnectionManager.closeConnection();
         }
         return true;
 
@@ -91,6 +101,7 @@ public class TodoList implements Serializable {
 
     public TodoItem[] topFiveAscendinglyByStartDate() {
         TodoItem[] topFiveItems;
+        conn=ConnectionManager.getConnection();
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -102,12 +113,16 @@ public class TodoList implements Serializable {
             s.printStackTrace();
             return new TodoItem[0];
         }
+        finally {
+            ConnectionManager.closeConnection();
+        }
         return topFiveItems;
     }
 
 
     public TodoItem[] topFiveAscendinglyByEndDate() {
         TodoItem[] topFiveItems;
+        conn=ConnectionManager.getConnection();
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -118,6 +133,9 @@ public class TodoList implements Serializable {
         } catch (SQLException s) {
             s.printStackTrace();
             return new TodoItem[0];
+        }
+        finally {
+            ConnectionManager.closeConnection();
         }
         return topFiveItems;
 
