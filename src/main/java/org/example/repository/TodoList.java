@@ -259,8 +259,9 @@ public class TodoList implements Serializable {
 
     public TodoItem[] showAllItems() {
         TodoItem[] todoList;
+        Connection connection = ConnectionManager.getConnection();
         try {
-            Statement statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             String query ="SELECT * FROM TodoItem ;";
             ResultSet resultSet=statement.executeQuery(query);
             todoList = getArrayOfTodosFromResultSet(resultSet);
@@ -269,7 +270,11 @@ public class TodoList implements Serializable {
         }
         catch  (SQLException e) {
             e.printStackTrace();
-            }
+        }
+        finally {
+            ConnectionManager.closeConnection();
+        }
+
 
         return null;
     }

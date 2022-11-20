@@ -139,16 +139,16 @@ public class CommandMenu {
             return Response.status(200,"Delete Operation Done").build();
         else return Response.status(400,"Couldn't Delete the todo item. Please make sure this title exists!").build();
     }
-    private void printShowAllItemsOptions(){
-        TodoItem[] todoList1 = todoList.showAllItems();
-        if(todoList1==null){
-            System.out.println("There's no todo to show ");
-        }
-        else{
-            for(int counter=0;counter<todoList1.length;counter++){
-                System.out.println(todoList1[counter].toString());
-            }
-        }
+
+    @GET
+    @Path("/showAllTodoItems")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response printShowAllItemsOptions(){
+        if(todoList.showAllItems()==null) {
+            return Response.status(400,"There is no todo!").build();
+        }else{
+        return Response.ok(todoList.showAllItems()).build();
+    }
 
     }
     @GET
