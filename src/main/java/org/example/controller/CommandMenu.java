@@ -2,6 +2,7 @@ package org.example.controller;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+
 import jakarta.ws.rs.core.Response;
 import org.example.DTO.TodoItem;
 import org.example.repository.TodoList;
@@ -177,7 +178,8 @@ public class CommandMenu {
     @GET
     @Path("/searchByStartDate/{startDate}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response printTodoItemsByStartDate(@PathParam("startDate")LocalDate startDate) {
+    public Response printTodoItemsByStartDate(@PathParam("startDate")String startDateString) {
+        LocalDate startDate=LocalDate.parse(startDateString);
         if (todoList.searchByStartDate(startDate) == null) {
            return Response.status(400,"Couldn't search in the todo item. Please make sure that this start date exists!").build();
         } else {
@@ -188,7 +190,8 @@ public class CommandMenu {
     @GET
     @Path("/searchByEndDate/{endDate}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response printTodoItemsByEndDate(@PathParam("endDate")LocalDate endDate) {
+    public Response printTodoItemsByEndDate(@PathParam("endDate")String endDateString) {
+        LocalDate endDate=LocalDate.parse(endDateString);
         if (todoList.searchByEndDate(endDate) == null) {
             return Response.status(400,"Couldn't search in the todo item. Please make sure that this end date exists!").build();
         } else {
