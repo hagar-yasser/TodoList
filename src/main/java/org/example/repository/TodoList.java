@@ -1,6 +1,6 @@
 package org.example.repository;
 
-import org.example.DTO.TodoItem;
+import org.example.dto.TodoItem;
 import org.example.utils.ConnectionManager;
 
 import java.io.Serializable;
@@ -19,7 +19,7 @@ public class TodoList implements Serializable, MyRepository {
 
     }
 
-    public boolean addItem(TodoItem todoItem) {
+    public boolean addItem(TodoItem todoItem) throws Exception {
         conn= ConnectionManager.getConnection();
         try {
             Statement stmt = conn.createStatement();
@@ -29,8 +29,9 @@ public class TodoList implements Serializable, MyRepository {
                     todoItem.getCategory(), todoItem.getPriority(),
                     todoItem.getStartDate(), todoItem.getEndDate(), todoItem.getFavourite() ? 1 : 0));
         } catch (SQLException s) {
-            s.printStackTrace();
-            return false;
+//            s.printStackTrace();
+            throw new Exception("Cannot Insert to Database. Please Check if the connection is established");
+//            return false;
         }
         finally {
             ConnectionManager.closeConnection();
@@ -40,15 +41,17 @@ public class TodoList implements Serializable, MyRepository {
     }
 
 
-    public boolean deleteItem(String title) {
+    public boolean deleteItem(String title) throws Exception {
         conn=ConnectionManager.getConnection();
         try {
             Statement stmt = conn.createStatement();
 
             stmt.executeUpdate(String.format("DELETE FROM %s WHERE %s = '%s';", TodoItem.tableName, TodoItem.titleColumnName, title));
         } catch (SQLException s) {
-            s.printStackTrace();
-            return false;
+            throw new Exception("Cannot Delete to Database. Please Check if the connection is established");
+
+//            s.printStackTrace();
+//            return false;
         }
         finally {
             ConnectionManager.closeConnection();
@@ -99,7 +102,7 @@ public class TodoList implements Serializable, MyRepository {
         return TodoItemsInResult;
     }
 
-    public TodoItem[] topFiveAscendinglyByStartDate() {
+    public TodoItem[] topFiveAscendinglyByStartDate() throws Exception {
         TodoItem[] topFiveItems;
         conn=ConnectionManager.getConnection();
         try {
@@ -110,8 +113,9 @@ public class TodoList implements Serializable, MyRepository {
            topFiveItems=getArrayOfTodosFromResultSet(rs);
 
         } catch (SQLException s) {
-            s.printStackTrace();
-            return new TodoItem[0];
+            throw new Exception("Cannot sort by start date Database. Please Check if the connection is established");
+//            s.printStackTrace();
+//            return new TodoItem[0];
         }
         finally {
             ConnectionManager.closeConnection();
@@ -120,7 +124,7 @@ public class TodoList implements Serializable, MyRepository {
     }
 
 
-    public TodoItem[] topFiveAscendinglyByEndDate() {
+    public TodoItem[] topFiveAscendinglyByEndDate() throws Exception {
         TodoItem[] topFiveItems;
         conn=ConnectionManager.getConnection();
         try {
@@ -131,8 +135,9 @@ public class TodoList implements Serializable, MyRepository {
             topFiveItems=getArrayOfTodosFromResultSet(rs);
 
         } catch (SQLException s) {
-            s.printStackTrace();
-            return new TodoItem[0];
+//            s.printStackTrace();
+//            return new TodoItem[0];
+            throw new Exception("Cannot Sort by end date Database. Please Check if the connection is established");
         }
         finally {
             ConnectionManager.closeConnection();

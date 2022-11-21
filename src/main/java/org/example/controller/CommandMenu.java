@@ -3,7 +3,7 @@ package org.example.controller;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.example.DTO.TodoItem;
+import org.example.dto.TodoItem;
 import org.example.repository.TodoList;
 import org.example.service.TodoListService;
 
