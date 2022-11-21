@@ -8,4 +8,5 @@ public interface MyService {
     Response deleteItem(String title);
     Response getTopFiveByStartDate();
     Response getTopFiveByEndDate();
+    Response searchByTitle(String title);
 }

@@ -91,20 +91,20 @@ public class CommandMenu {
     public Response printAddItemOptions(TodoItem newItem) {
         return todoListService.addItem(newItem);
     }
-    private void printUpdateItemOptions(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the title of Todo you want to update ");
-        String title = sc.nextLine();
-        TodoItem todoWantToUpdate = todoList.searchByTitle(title);
-        if(todoWantToUpdate==null)
-            System.out.println("This todo with this title is not found\nMission is failed");
-        else {
-            System.out.println("The todo you want to update ");
-            System.out.println(todoWantToUpdate);
-            TodoItem updatedTodo = printTodoItemMenu();
-            todoList.updateItem(title, updatedTodo);
-        }
-    }
+//    private void printUpdateItemOptions(){
+//        Scanner sc = new Scanner(System.in);
+//        System.out.println("Enter the title of Todo you want to update ");
+//        String title = sc.nextLine();
+//        TodoItem todoWantToUpdate = todoList.searchByTitle(title);
+//        if(todoWantToUpdate==null)
+//            System.out.println("This todo with this title is not found\nMission is failed");
+//        else {
+//            System.out.println("The todo you want to update ");
+//            System.out.println(todoWantToUpdate);
+//            TodoItem updatedTodo = printTodoItemMenu();
+//            todoList.updateItem(title, updatedTodo);
+//        }
+//    }
     @DELETE
     @Path("/todoItem/{title}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -141,11 +141,8 @@ public class CommandMenu {
     @Path("/searchByTitle/{title}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response printTodoItemsByTitle(@PathParam("title")String title) {
-        if(todoList.searchByTitle(title) == null){
-            return Response.status(400,"Couldn't search in the todo item. Please make sure that this title exists!").build();
-        }else{
-            return Response.ok(todoList.searchByTitle(title)).build();
-        }
+
+        return todoListService.searchByTitle(title);
     }
 
     @GET
@@ -184,22 +181,22 @@ public class CommandMenu {
     }
 
 
-    private void printAddTodoItemToCategoryOptions(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the title of Todo you want to add to favourite ");
-        String title = sc.nextLine();
-        System.out.println("Enter the category of Todo you want to update");
-        String category = sc.nextLine();
-        todoList.addTodoItemToCategory(title,category);
-    }
-    private void printAddTodoItemToFavoriteOptions(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the title of Todo you want to add to favourite ");
-        String title = sc.nextLine();
-        todoList.addTodoItemToFavorite(title);
-
-
-    }
+//    private void printAddTodoItemToCategoryOptions(){
+//        Scanner sc = new Scanner(System.in);
+//        System.out.println("Enter the title of Todo you want to add to favourite ");
+//        String title = sc.nextLine();
+//        System.out.println("Enter the category of Todo you want to update");
+//        String category = sc.nextLine();
+//        todoList.addTodoItemToCategory(title,category);
+//    }
+//    private void printAddTodoItemToFavoriteOptions(){
+//        Scanner sc = new Scanner(System.in);
+//        System.out.println("Enter the title of Todo you want to add to favourite ");
+//        String title = sc.nextLine();
+//        todoList.addTodoItemToFavorite(title);
+//
+//
+//    }
 
 }
 

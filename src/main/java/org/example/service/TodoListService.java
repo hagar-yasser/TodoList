@@ -75,4 +75,16 @@ public class TodoListService implements MyService {
             return Response.status(500, e.getMessage()).build();
         }
     }
+    public Response searchByTitle(String title){
+        try {
+            if (todoList.searchByTitle(title) == null) {
+                return Response.status(400, "Couldn't search in the todo item. Please make sure that this title exists!").build();
+            } else {
+                return Response.ok(todoList.searchByTitle(title)).build();
+            }
+        }
+        catch (Exception e){
+            return Response.status(500,e.getMessage()).build();
+        }
+    }
 }

@@ -7,4 +7,5 @@ public interface MyRepository {
     boolean deleteItem(String title) throws Exception;
     TodoItem[]topFiveAscendinglyByStartDate() throws Exception;
     TodoItem[]topFiveAscendinglyByEndDate() throws Exception;
+    TodoItem searchByTitle(String title) throws Exception;
 }

@@ -146,7 +146,7 @@ public class TodoList implements Serializable, MyRepository {
 
     }
 
-    public TodoItem searchByTitle(String title) {
+    public TodoItem searchByTitle(String title) throws Exception {
         TodoItem todoItem = new TodoItem();
         conn=ConnectionManager.getConnection();
         try {
@@ -166,7 +166,8 @@ public class TodoList implements Serializable, MyRepository {
             }
         }
         catch (SQLException s){
-            s.printStackTrace();
+//            s.printStackTrace();
+            throw new Exception("Cannot search by title. Please check if the database connection is established.");
         }finally {
             ConnectionManager.closeConnection();
         }
@@ -244,23 +245,23 @@ public class TodoList implements Serializable, MyRepository {
     }
 
 
-    public void updateItem(String title, TodoItem updatedTodoItem) {
-        TodoItem todoItem = searchByTitle(title);
-        if(todoItem==null) {
-            System.out.println("Todo's not found");
-        }
-        else{
-            try {
-                Statement statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-                String query = "UPDATE TodoItem SET  Description =\""+ updatedTodoItem.getDescription()+"\" , Category =\""+updatedTodoItem.getCategory()+"\" , Priority = \""+updatedTodoItem.getPriority()+"\" , StartDate = \""+updatedTodoItem.getStartDate()+"\" , EndDate = \""+updatedTodoItem.getEndDate()+"\" WHERE Title LIKE \""+title+"%\" ;";
-                statement.executeUpdate(query);
-                System.out.println("Todo's updated successfully");
-            }
-            catch  (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    public void updateItem(String title, TodoItem updatedTodoItem) {
+//        TodoItem todoItem = searchByTitle(title);
+//        if(todoItem==null) {
+//            System.out.println("Todo's not found");
+//        }
+//        else{
+//            try {
+//                Statement statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+//                String query = "UPDATE TodoItem SET  Description =\""+ updatedTodoItem.getDescription()+"\" , Category =\""+updatedTodoItem.getCategory()+"\" , Priority = \""+updatedTodoItem.getPriority()+"\" , StartDate = \""+updatedTodoItem.getStartDate()+"\" , EndDate = \""+updatedTodoItem.getEndDate()+"\" WHERE Title LIKE \""+title+"%\" ;";
+//                statement.executeUpdate(query);
+//                System.out.println("Todo's updated successfully");
+//            }
+//            catch  (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
     public TodoItem[] showAllItems() {
         TodoItem[] todoList;
@@ -279,40 +280,40 @@ public class TodoList implements Serializable, MyRepository {
         return null;
     }
 
-    public void addTodoItemToCategory(String title, String category) {
-        TodoItem todoItem = searchByTitle(title);
-        if(todoItem==null) {
-            System.out.println("Todo's not found");
-        }
-        else{
-            try {
-                Statement statement = conn.createStatement();
-                String query = "UPDATE TodoItem SET   Category =\""+category+"\"  WHERE Title LIKE \""+title+"%\" ;";
-                statement.executeUpdate(query);
-                System.out.println("Todo's updated successfully");
-            }
-            catch  (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    public void addTodoItemToCategory(String title, String category) {
+//        TodoItem todoItem = searchByTitle(title);
+//        if(todoItem==null) {
+//            System.out.println("Todo's not found");
+//        }
+//        else{
+//            try {
+//                Statement statement = conn.createStatement();
+//                String query = "UPDATE TodoItem SET   Category =\""+category+"\"  WHERE Title LIKE \""+title+"%\" ;";
+//                statement.executeUpdate(query);
+//                System.out.println("Todo's updated successfully");
+//            }
+//            catch  (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
-    public void addTodoItemToFavorite(String title) {
-        TodoItem todoItem = searchByTitle(title);
-        if(todoItem==null) {
-            System.out.println("Todo's not found");
-        }
-        else{
-            try {
-                Statement statement = conn.createStatement();
-                String query = "UPDATE TodoItem SET   IsFavorite = 1  WHERE Title LIKE \""+title+"%\" ;";
-                statement.executeUpdate(query);
-                System.out.println("Todo's updated successfully");
-            }
-            catch  (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    public void addTodoItemToFavorite(String title) {
+//        TodoItem todoItem = searchByTitle(title);
+//        if(todoItem==null) {
+//            System.out.println("Todo's not found");
+//        }
+//        else{
+//            try {
+//                Statement statement = conn.createStatement();
+//                String query = "UPDATE TodoItem SET   IsFavorite = 1  WHERE Title LIKE \""+title+"%\" ;";
+//                statement.executeUpdate(query);
+//                System.out.println("Todo's updated successfully");
+//            }
+//            catch  (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 }
 //
