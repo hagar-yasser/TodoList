@@ -34,5 +34,11 @@
     <orderEntry type="library" name="Maven: jakarta.json.bind:jakarta.json.bind-api:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.parsson:parsson:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse:yasson:3.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context:5.3.23" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-aop:5.3.23" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.3.23" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-core:5.3.23" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.23" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.3.23" level="project" />
   </component>
 </module>
