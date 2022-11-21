@@ -110,10 +110,7 @@ public class CommandMenu {
     @Path("/showAllTodoItems")
     @Produces(MediaType.APPLICATION_JSON)
     public Response printShowAllItemsOptions(){
-        if(todoList.showAllItems()==null) {
-            return Response.status(400,"There is no todo!").build();
-        }else{
-        return Response.ok(todoList.showAllItems()).build();
+        return  todoListService.showAllItems();
     }
 
     }

@@ -137,4 +137,17 @@ public class TodoListService implements MyService {
             return Response.status(500,e.getMessage()).build();
         }
     }
+
+    public Response showAllItems() {
+       try {
+           if(todoList.showAllItems()==null) {
+               return Response.status(400,"There is no todo!").build();
+           }else {
+               return Response.ok(todoList.showAllItems()).build();
+           }
+
+       }catch(Exception e){
+           return Response.status(500,e.getMessage()).build();
+       }
+    }
 }

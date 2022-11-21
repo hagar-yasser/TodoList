@@ -270,7 +270,7 @@ public class TodoList implements Serializable, MyRepository {
 
     }
 
-    public TodoItem[] showAllItems() {
+    public TodoItem[] showAllItems() throws Exception {
         TodoItem[] todoList;
         Connection connection = ConnectionManager.getConnection();
         try {
@@ -282,14 +282,13 @@ public class TodoList implements Serializable, MyRepository {
 
         }
         catch  (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            throw new Exception("Cannot show all todo items. Please check if the database connection is established.");
         }
         finally {
             ConnectionManager.closeConnection();
         }
 
-
-        return null;
     }
 
     public boolean addTodoItemToCategory(String title, String category) {

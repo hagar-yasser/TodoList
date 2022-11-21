@@ -14,4 +14,5 @@ public interface MyRepository {
     TodoItem[] searchByEndDate(LocalDate endDate) throws Exception;
     TodoItem[] searchByPriority(int priority) throws Exception;
     boolean updateItem(String title, TodoItem updatedTodoItem) throws Exception;
+    TodoItem[] showAllItems() throws Exception;
 }
