@@ -96,13 +96,7 @@ public class CommandMenu {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/updateTodoItem/{title}")
     public Response printUpdateItemOptions(@PathParam("title") String title,TodoItem updatedTodo){
-        if( todoList.updateItem(title, updatedTodo)){
-            return Response.status(200,"Updated successfully").build();
-        }else {
-            return Response.status(400,"Not updated").build();
-        }
-
-
+        return todoListService.updateItem(title, updatedTodo);
 
     }
     @DELETE

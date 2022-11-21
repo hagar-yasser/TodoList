@@ -125,4 +125,16 @@ public class TodoListService implements MyService {
             return Response.status(500,e.getMessage()).build();
         }
     }
+
+    public Response updateItem(String title, TodoItem updatedTodo) {
+        try {
+            if (todoList.updateItem(title, updatedTodo)) {
+                return Response.status(200, "Updated successfully").build();
+            } else {
+                return Response.status(400, "Not updated").build();
+            }
+        }catch(Exception e){
+            return Response.status(500,e.getMessage()).build();
+        }
+    }
 }

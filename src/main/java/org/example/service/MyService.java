@@ -14,4 +14,5 @@ public interface MyService {
     Response searchByStartDate(LocalDate startDate);
     Response searchByEndDate(LocalDate endDate);
     Response searchByPriority(int priority);
+    Response updateItem(String title, TodoItem updatedTodo);
 }
