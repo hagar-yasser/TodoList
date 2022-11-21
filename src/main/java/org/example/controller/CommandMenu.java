@@ -171,12 +171,7 @@ public class CommandMenu {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/updateIsFavourite/{title}")
     public Response printAddTodoItemToFavoriteOptions(@PathParam("title") String title){
-        if(todoList.addTodoItemToFavorite(title)){
-            return Response.status(200,"Updated successfully").build();
-        }else {
-            return Response.status(400,"Not updated").build();
-        }
-
+        return  todoListService.addTodoItemToFavorite(title);
     }
 
 }

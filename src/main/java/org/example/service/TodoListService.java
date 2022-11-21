@@ -162,4 +162,16 @@ public class TodoListService implements MyService {
             return Response.status(500,e.getMessage()).build();
         }
     }
+
+    public Response addTodoItemToFavorite(String title){
+        try {
+            if(todoList.addTodoItemToFavorite(title)){
+                return Response.status(200,"Updated successfully").build();
+            }else {
+                return Response.status(400,"Not updated").build();
+            }
+        }catch(Exception e){
+            return Response.status(500,e.getMessage()).build();
+        }
+    }
 }

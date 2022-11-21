@@ -17,4 +17,6 @@ public interface MyService {
     Response updateItem(String title, TodoItem updatedTodo);
     Response showAllItems();
     Response addTodoItemToCategory(String title, String category);
+
+    Response addTodoItemToFavorite(String title);
 }
