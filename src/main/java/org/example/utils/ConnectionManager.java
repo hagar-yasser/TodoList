@@ -22,11 +22,11 @@ public class ConnectionManager {
                         System.out.println("Connected Successfully");
                     } catch (SQLException ex) {
                         // log an exception. fro example:
-                        System.out.println("Failed to create the database connection.");
+                        System.err.println("Failed to create the database connection.");
                     }
                 } catch (ClassNotFoundException ex) {
                     // log an exception. for example:
-                    System.out.println("Driver not found.");
+                    System.err.println("Driver not found.");
                 }
                 return con;
             }
