@@ -1,4 +1,4 @@
-package org.example.DTO;
+package org.example.dto;
 
 import java.io.Serializable;
 import java.time.LocalDate;
