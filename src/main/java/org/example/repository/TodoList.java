@@ -239,22 +239,26 @@ public class TodoList implements Serializable {
     }
 
 
-    public void updateItem(String title, TodoItem updatedTodoItem) {
+    public boolean updateItem(String title, TodoItem updatedTodoItem) {
         TodoItem todoItem = searchByTitle(title);
         if(todoItem==null) {
-            System.out.println("Todo's not found");
+            return false;
         }
-        else{
-            try {
-                Statement statement = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-                String query = "UPDATE TodoItem SET  Description =\""+ updatedTodoItem.getDescription()+"\" , Category =\""+updatedTodoItem.getCategory()+"\" , Priority = \""+updatedTodoItem.getPriority()+"\" , StartDate = \""+updatedTodoItem.getStartDate()+"\" , EndDate = \""+updatedTodoItem.getEndDate()+"\" WHERE Title LIKE \""+title+"%\" ;";
-                statement.executeUpdate(query);
-                System.out.println("Todo's updated successfully");
-            }
-            catch  (SQLException e) {
-                e.printStackTrace();
-            }
+        Connection connection = ConnectionManager.getConnection();
+        try {
+            Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            String query = "UPDATE TodoItem SET  Description =\""+ updatedTodoItem.getDescription()+"\" , Category =\""+updatedTodoItem.getCategory()+"\" , Priority = \""+updatedTodoItem.getPriority()+"\" , StartDate = \""+updatedTodoItem.getStartDate()+"\" , EndDate = \""+updatedTodoItem.getEndDate()+"\" WHERE Title LIKE \""+title+"%\" ;";
+            statement.executeUpdate(query);
+            return true;
         }
+        catch  (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            ConnectionManager.closeConnection();
+        }
+
+        return false;
     }
 
     public TodoItem[] showAllItems() {

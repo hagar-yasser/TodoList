@@ -116,19 +116,19 @@ public class CommandMenu {
         else
            return Response.status(400,"Couldn't add the todo item. Please try another title!").build();
     }
-    private void printUpdateItemOptions(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the title of Todo you want to update ");
-        String title = sc.nextLine();
-        TodoItem todoWantToUpdate = todoList.searchByTitle(title);
-        if(todoWantToUpdate==null)
-            System.out.println("This todo with this title is not found\nMission is failed");
-        else {
-            System.out.println("The todo you want to update ");
-            System.out.println(todoWantToUpdate);
-            TodoItem updatedTodo = printTodoItemMenu();
-            todoList.updateItem(title, updatedTodo);
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/updateTodoItem/{title}")
+    public Response printUpdateItemOptions(@PathParam("title") String title,TodoItem updatedTodo){
+        if( todoList.updateItem(title, updatedTodo)){
+            return Response.status(200,"Updated successfully").build();
+        }else {
+            return Response.status(400,"Not updated").build();
         }
+
+
+
     }
     @DELETE
     @Path("/todoItem/{title}")
@@ -219,7 +219,7 @@ public class CommandMenu {
         if(todoList.addTodoItemToCategory(title,category)){
             return Response.status(200,"Updated successfully").build();
         }else {
-            return Response.ok(todoList.addTodoItemToCategory(title,category)).build();
+            return Response.status(400,"Not updated").build();
         }
     }
 
@@ -231,7 +231,7 @@ public class CommandMenu {
         if(todoList.addTodoItemToFavorite(title)){
             return Response.status(200,"Updated successfully").build();
         }else {
-            return Response.ok(todoList.addTodoItemToFavorite(title)).build();
+            return Response.status(400,"Not updated").build();
         }
 
     }
