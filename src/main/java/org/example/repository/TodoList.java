@@ -248,7 +248,7 @@ public class TodoList implements Serializable, MyRepository {
     }
 
 
-    public boolean updateItem(String title, TodoItem updatedTodoItem) {
+    public boolean updateItem(String title, TodoItem updatedTodoItem) throws Exception{
         TodoItem todoItem = searchByTitle(title);
         if(todoItem==null) {
             return false;
@@ -261,13 +261,13 @@ public class TodoList implements Serializable, MyRepository {
             return true;
         }
         catch  (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            throw new Exception("Cannot update item. Please check if the database connection is established.");
         }
         finally {
             ConnectionManager.closeConnection();
         }
 
-        return false;
     }
 
     public TodoItem[] showAllItems() {
