@@ -16,4 +16,5 @@ public interface MyService {
     Response searchByPriority(int priority);
     Response updateItem(String title, TodoItem updatedTodo);
     Response showAllItems();
+    Response addTodoItemToCategory(String title, String category);
 }

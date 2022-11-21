@@ -150,4 +150,16 @@ public class TodoListService implements MyService {
            return Response.status(500,e.getMessage()).build();
        }
     }
+
+    public Response addTodoItemToCategory(String title, String category) {
+        try {
+            if(todoList.addTodoItemToCategory(title,category)){
+                return Response.status(200,"Updated successfully").build();
+            }else {
+                return Response.status(400,"Not updated").build();
+            }
+        }catch(Exception e){
+            return Response.status(500,e.getMessage()).build();
+        }
+    }
 }

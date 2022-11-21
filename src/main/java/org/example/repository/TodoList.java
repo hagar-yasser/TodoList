@@ -291,7 +291,7 @@ public class TodoList implements Serializable, MyRepository {
 
     }
 
-    public boolean addTodoItemToCategory(String title, String category) {
+    public boolean addTodoItemToCategory(String title, String category) throws Exception {
         TodoItem todoItem = searchByTitle(title);
         if(todoItem==null) {
             return false;
@@ -304,13 +304,12 @@ public class TodoList implements Serializable, MyRepository {
             return true;
         }
         catch  (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            throw new Exception("Cannot update category. Please check if the database connection is established.");
         }
         finally {
             ConnectionManager.closeConnection();
         }
-
-        return false;
     }
 
     public boolean addTodoItemToFavorite(String title) {

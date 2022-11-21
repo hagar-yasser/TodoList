@@ -15,4 +15,5 @@ public interface MyRepository {
     TodoItem[] searchByPriority(int priority) throws Exception;
     boolean updateItem(String title, TodoItem updatedTodoItem) throws Exception;
     TodoItem[] showAllItems() throws Exception;
+    boolean addTodoItemToCategory(String title, String category) throws Exception;
 }

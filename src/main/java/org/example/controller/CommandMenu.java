@@ -112,8 +112,6 @@ public class CommandMenu {
     public Response printShowAllItemsOptions(){
         return  todoListService.showAllItems();
     }
-
-    }
     @GET
     @Path("/topFiveItemsByStartDate")
     @Produces(MediaType.APPLICATION_JSON)
@@ -165,11 +163,7 @@ public class CommandMenu {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public Response printAddTodoItemToCategoryOptions( @PathParam("title") String title,String category){
-        if(todoList.addTodoItemToCategory(title,category)){
-            return Response.status(200,"Updated successfully").build();
-        }else {
-            return Response.status(400,"Not updated").build();
-        }
+        return todoListService.addTodoItemToCategory(title,category);
     }
 
     @PUT
