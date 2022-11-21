@@ -174,7 +174,7 @@ public class TodoList implements Serializable, MyRepository {
         return todoItem;
     }
 
-    public TodoItem[] searchByStartDate(LocalDate startDate) {
+    public TodoItem[] searchByStartDate(LocalDate startDate) throws Exception {
         TodoItem[] listOfResult;
         conn=ConnectionManager.getConnection();
         try {
@@ -189,15 +189,16 @@ public class TodoList implements Serializable, MyRepository {
             }
         }
         catch (SQLException s){
-            s.printStackTrace();
-            return new TodoItem[0];
+//            s.printStackTrace();
+//            return new TodoItem[0];
+            throw new Exception("Cannot search by startDate. Please check if the database connection is established.");
         }finally {
             ConnectionManager.closeConnection();
         }
         return listOfResult;
         }
 
-    public TodoItem[] searchByEndDate(LocalDate endDate) {
+    public TodoItem[] searchByEndDate(LocalDate endDate) throws Exception{
         TodoItem[] listOfResult;
         conn= ConnectionManager.getConnection();
         try {
@@ -212,8 +213,9 @@ public class TodoList implements Serializable, MyRepository {
             }
         }
         catch (SQLException s){
-            s.printStackTrace();
-            return new TodoItem[0];
+//            s.printStackTrace();
+//            return new TodoItem[0];
+            throw new Exception("Cannot search by endDate. Please check if the database connection is established.");
         }finally {
             ConnectionManager.closeConnection();
         }
@@ -221,7 +223,7 @@ public class TodoList implements Serializable, MyRepository {
     }
 
 
-    public TodoItem[] searchByPriority(int priority) {
+    public TodoItem[] searchByPriority(int priority) throws Exception{
         TodoItem[] listOfResult;
         conn = ConnectionManager.getConnection();
         try {
@@ -236,8 +238,9 @@ public class TodoList implements Serializable, MyRepository {
             }
         }
         catch (SQLException s){
-            s.printStackTrace();
-            return new TodoItem[0];
+//            s.printStackTrace();
+//            return new TodoItem[0];
+            throw new Exception("Cannot search by priority. Please check if the database connection is established.");
         }finally {
             ConnectionManager.closeConnection();
         }

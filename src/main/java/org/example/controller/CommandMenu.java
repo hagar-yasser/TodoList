@@ -150,11 +150,7 @@ public class CommandMenu {
     @Produces(MediaType.APPLICATION_JSON)
     public Response printTodoItemsByStartDate(@PathParam("startDate")String startDateString) {
         LocalDate startDate=LocalDate.parse(startDateString);
-        if (todoList.searchByStartDate(startDate) == null) {
-           return Response.status(400,"Couldn't search in the todo item. Please make sure that this start date exists!").build();
-        } else {
-            return Response.ok(todoList.searchByStartDate(startDate)).build();
-        }
+        return todoListService.searchByStartDate(startDate);
     }
 
     @GET
@@ -162,22 +158,14 @@ public class CommandMenu {
     @Produces(MediaType.APPLICATION_JSON)
     public Response printTodoItemsByEndDate(@PathParam("endDate")String endDateString) {
         LocalDate endDate=LocalDate.parse(endDateString);
-        if (todoList.searchByEndDate(endDate) == null) {
-            return Response.status(400,"Couldn't search in the todo item. Please make sure that this end date exists!").build();
-        } else {
-            return Response.ok(todoList.searchByEndDate(endDate)).build();
-        }
+        return todoListService.searchByEndDate(endDate);
     }
 
     @GET
     @Path("/searchPriority/{priority}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response printTodoItemsByPriority(@PathParam("priority")int priority) {
-        if (todoList.searchByPriority(priority) == null) {
-            return Response.status(400,"Couldn't search in the todo item. Please make sure that this priority exists!").build();
-        } else {
-            return Response.ok(todoList.searchByPriority(priority)).build();
-        }
+        return todoListService.searchByPriority(priority);
     }
 
 

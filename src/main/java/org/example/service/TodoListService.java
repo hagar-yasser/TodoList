@@ -4,6 +4,8 @@ import jakarta.ws.rs.core.Response;
 import org.example.dto.TodoItem;
 import org.example.repository.TodoList;
 
+import java.time.LocalDate;
+
 public class TodoListService implements MyService {
     private TodoList todoList = new TodoList();
     private static final int highPriority = 1;
@@ -84,6 +86,42 @@ public class TodoListService implements MyService {
             }
         }
         catch (Exception e){
+            return Response.status(500,e.getMessage()).build();
+        }
+    }
+
+    public Response searchByStartDate(LocalDate startDate) {
+        try{
+            if (todoList.searchByStartDate(startDate) == null) {
+                return Response.status(400,"Couldn't search in the todo item. Please make sure that this start date exists!").build();
+            } else {
+                return Response.ok(todoList.searchByStartDate(startDate)).build();
+            }
+        }catch(Exception e){
+            return Response.status(500,e.getMessage()).build();
+        }
+    }
+
+    public Response searchByEndDate(LocalDate endDate) {
+        try{
+            if (todoList.searchByEndDate(endDate) == null) {
+                return Response.status(400,"Couldn't search in the todo item. Please make sure that this end date exists!").build();
+            } else {
+                return Response.ok(todoList.searchByEndDate(endDate)).build();
+            }
+        }catch(Exception e){
+            return Response.status(500,e.getMessage()).build();
+        }
+    }
+
+    public Response searchByPriority(int priority) {
+        try{
+            if (todoList.searchByPriority(priority) == null) {
+                return Response.status(400,"Couldn't search in the todo item. Please make sure that this priority exists!").build();
+            } else {
+                return Response.ok(todoList.searchByPriority(priority)).build();
+            }
+        }catch(Exception e){
             return Response.status(500,e.getMessage()).build();
         }
     }
