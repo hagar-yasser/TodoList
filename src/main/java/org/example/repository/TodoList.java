@@ -301,22 +301,25 @@ public class TodoList implements Serializable {
         return false;
     }
 
-    public void addTodoItemToFavorite(String title) {
+    public boolean addTodoItemToFavorite(String title) {
         TodoItem todoItem = searchByTitle(title);
         if(todoItem==null) {
-            System.out.println("Todo's not found");
+            return false;
         }
-        else{
-            try {
-                Statement statement = conn.createStatement();
-                String query = "UPDATE TodoItem SET   IsFavorite = 1  WHERE Title LIKE \""+title+"%\" ;";
-                statement.executeUpdate(query);
-                System.out.println("Todo's updated successfully");
-            }
-            catch  (SQLException e) {
-                e.printStackTrace();
-            }
+        Connection connection = ConnectionManager.getConnection();
+        try {
+            Statement statement = connection.createStatement();
+            String query = "UPDATE TodoItem SET   IsFavorite = 1  WHERE Title LIKE \""+title+"%\" ;";
+            statement.executeUpdate(query);
+            return true;
         }
+        catch  (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            ConnectionManager.closeConnection();
+        }
+        return false;
     }
 }
 //

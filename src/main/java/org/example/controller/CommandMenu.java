@@ -222,12 +222,17 @@ public class CommandMenu {
             return Response.ok(todoList.addTodoItemToCategory(title,category)).build();
         }
     }
-    private void printAddTodoItemToFavoriteOptions(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the title of Todo you want to add to favourite ");
-        String title = sc.nextLine();
-        todoList.addTodoItemToFavorite(title);
 
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/updateIsFavourite/{title}")
+    public Response printAddTodoItemToFavoriteOptions(@PathParam("title") String title){
+        if(todoList.addTodoItemToFavorite(title)){
+            return Response.status(200,"Updated successfully").build();
+        }else {
+            return Response.ok(todoList.addTodoItemToFavorite(title)).build();
+        }
 
     }
 
