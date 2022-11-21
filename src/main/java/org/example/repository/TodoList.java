@@ -8,7 +8,7 @@ import java.sql.*;
 import java.time.LocalDate;
 
 
-public class TodoList implements Serializable {
+public class TodoList implements Serializable, MyRepository {
     private int currentSizeOfTodoItemsList = 100;
     private TodoItem[] todoItemsList = new TodoItem[currentSizeOfTodoItemsList];
     private int indexOfLastItemInList = -1;
