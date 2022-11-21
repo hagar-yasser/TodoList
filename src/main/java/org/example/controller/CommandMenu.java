@@ -211,13 +211,16 @@ public class CommandMenu {
     }
 
 
-    private void printAddTodoItemToCategoryOptions(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the title of Todo you want to add to favourite ");
-        String title = sc.nextLine();
-        System.out.println("Enter the category of Todo you want to update");
-        String category = sc.nextLine();
-        todoList.addTodoItemToCategory(title,category);
+    @PUT
+    @Path("/updateCategory/{title}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response printAddTodoItemToCategoryOptions( @PathParam("title") String title,String category){
+        if(todoList.addTodoItemToCategory(title,category)){
+            return Response.status(200,"Updated successfully").build();
+        }else {
+            return Response.ok(todoList.addTodoItemToCategory(title,category)).build();
+        }
     }
     private void printAddTodoItemToFavoriteOptions(){
         Scanner sc = new Scanner(System.in);

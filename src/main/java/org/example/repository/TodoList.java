@@ -279,22 +279,26 @@ public class TodoList implements Serializable {
         return null;
     }
 
-    public void addTodoItemToCategory(String title, String category) {
+    public boolean addTodoItemToCategory(String title, String category) {
         TodoItem todoItem = searchByTitle(title);
         if(todoItem==null) {
-            System.out.println("Todo's not found");
+            return false;
         }
-        else{
-            try {
-                Statement statement = conn.createStatement();
-                String query = "UPDATE TodoItem SET   Category =\""+category+"\"  WHERE Title LIKE \""+title+"%\" ;";
-                statement.executeUpdate(query);
-                System.out.println("Todo's updated successfully");
-            }
-            catch  (SQLException e) {
-                e.printStackTrace();
-            }
+        Connection connection = ConnectionManager.getConnection();
+        try {
+            Statement statement = connection.createStatement();
+            String query = "UPDATE TodoItem SET   Category =\""+category+"\"  WHERE Title LIKE \""+title+"%\" ;";
+            statement.executeUpdate(query);
+            return true;
         }
+        catch  (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            ConnectionManager.closeConnection();
+        }
+
+        return false;
     }
 
     public void addTodoItemToFavorite(String title) {
