@@ -25,8 +25,8 @@
 * Deploy war file that you will find /TodoList/target/TodoListProducer.war
 
 #### HINT :
-we are using 
-* JDK 11
-* tomcat 10
+We are using 
+ * JDK 11
+ * tomcat 10
 
 
