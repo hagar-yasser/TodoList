@@ -23,6 +23,11 @@
   ```
 * Open tomcate server version 10 
 * Deploy war file that you will find /TodoList/target/TodoListProducer.war
+* In Postman or any browser try and put any appropriate endpoint 
+  ```
+    http://localhost:8080/TodoListProducer/todoListApi/
+  
+  ```
 
 #### HINT :
 We are using 
