@@ -22,7 +22,7 @@
  
   ```
 * Open tomcate server version 10 
-* Deploy war file that you will find in todoList folder in tomcat 
+* Deploy war file that you will find /TodoList/target/TodoListProducer.war
 
 #### HINT :
 we are using 
