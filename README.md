@@ -16,5 +16,12 @@
      ```
   
 * Open TodoList folder in Intellij Idea
-* Run the Main Class
+* Write in terminal 
+  ```
+    mvn clean install
+ 
+  ```
+* Open tomcate server version 10 
+* Deploy war file that you will find in todoList folder in tomcat 
+
 
