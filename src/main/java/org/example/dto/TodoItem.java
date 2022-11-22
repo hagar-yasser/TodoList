@@ -19,7 +19,17 @@ public class TodoItem implements Serializable {
     public static String categoryColumnName="Category";
     public static String priorityColumnName="Priority";
     public static String isFavoriteColumnName="IsFavorite";
+    public TodoItem(){}
 
+    public TodoItem(String title, String description, String category, int priority, LocalDate startDate, LocalDate endDate, boolean favourite) {
+        this.title = title;
+        this.description = description;
+        this.category = category;
+        this.priority = priority;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.favourite = favourite;
+    }
 
     public String getTitle() {
         return title;

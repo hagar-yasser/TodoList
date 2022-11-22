@@ -4,8 +4,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.example.dto.TodoItem;
-import org.example.repository.TodoList;
+import org.example.repository.TodoListRepository;
 import org.example.service.TodoListService;
+import org.example.utils.ConnectionManager;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -13,10 +14,10 @@ import java.util.Scanner;
 @Path("/")
 public class CommandMenu {
     //To be removed
-    private TodoList todoList=new TodoList();
+    private TodoListRepository todoListRepository =new TodoListRepository(new ConnectionManager());
     private static final int highPriority=1;
     private static final int lowPriority=3;
-    TodoListService todoListService=new TodoListService();
+    TodoListService todoListService=new TodoListService(new TodoListRepository(new ConnectionManager()));
 
     //empty constructor so that the jersey servlet can initiate the CommandMenu Object
     public CommandMenu(){}

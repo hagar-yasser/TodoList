@@ -1,16 +1,22 @@
 package org.example.utils;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import java.sql.*;
-
+@Component
 public class ConnectionManager {
-    private static String url = "jdbc:mysql://localhost:3306/TodoList";
-    private static String driverName = "com.mysql.cj.jdbc.Driver";
-    private static String username = "root";
-    private static String password = "P@ssw0rd";
-    private static volatile Connection con;
-    private static String urlstring;
+    @Value("${jdbc.url}")
+    private String url ;
+    @Value("${jdbc.driverName}")
+    private String driverName ;
+    @Value("${jdbc.user}")
+    private String username;
+    @Value("${jdbc.pass}")
+    private String password;
+    private volatile Connection con;
 
-    public static Connection getConnection() {
+    public Connection getConnection() {
         if(con==null) {
             synchronized (ConnectionManager.class) {
                 if(con!=null)
@@ -33,7 +39,7 @@ public class ConnectionManager {
         }
         return con;
     }
-    public static void closeConnection(){
+    public void closeConnection(){
         try {
             con.close();
             con=null;

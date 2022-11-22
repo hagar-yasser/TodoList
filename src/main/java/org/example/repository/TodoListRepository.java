@@ -2,25 +2,29 @@ package org.example.repository;
 
 import org.example.dto.TodoItem;
 import org.example.utils.ConnectionManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
 import java.sql.*;
 import java.time.LocalDate;
 
-
-public class TodoList implements Serializable, MyRepository {
+@Repository
+public class TodoListRepository implements Serializable, MyRepository {
     private int currentSizeOfTodoItemsList = 100;
     private TodoItem[] todoItemsList = new TodoItem[currentSizeOfTodoItemsList];
     private int indexOfLastItemInList = -1;
 
     private Connection conn;
-
-    public TodoList() {
+    private ConnectionManager connectionManager;
+    @Autowired
+    public TodoListRepository(ConnectionManager connectionManager) {
+        this.connectionManager=connectionManager;
 
     }
 
     public boolean addItem(TodoItem todoItem) throws Exception {
-        conn= ConnectionManager.getConnection();
+        conn= connectionManager.getConnection();
         try {
             Statement stmt = conn.createStatement();
 
@@ -34,7 +38,7 @@ public class TodoList implements Serializable, MyRepository {
 //            return false;
         }
         finally {
-            ConnectionManager.closeConnection();
+            connectionManager.closeConnection();
         }
         return true;
 
@@ -42,7 +46,7 @@ public class TodoList implements Serializable, MyRepository {
 
 
     public boolean deleteItem(String title) throws Exception {
-        conn=ConnectionManager.getConnection();
+        conn=connectionManager.getConnection();
         try {
             Statement stmt = conn.createStatement();
 
@@ -54,7 +58,7 @@ public class TodoList implements Serializable, MyRepository {
 //            return false;
         }
         finally {
-            ConnectionManager.closeConnection();
+            connectionManager.closeConnection();
         }
         return true;
 
@@ -104,7 +108,7 @@ public class TodoList implements Serializable, MyRepository {
 
     public TodoItem[] topFiveAscendinglyByStartDate() throws Exception {
         TodoItem[] topFiveItems;
-        conn=ConnectionManager.getConnection();
+        conn=connectionManager.getConnection();
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -118,7 +122,7 @@ public class TodoList implements Serializable, MyRepository {
 //            return new TodoItem[0];
         }
         finally {
-            ConnectionManager.closeConnection();
+            connectionManager.closeConnection();
         }
         return topFiveItems;
     }
@@ -126,7 +130,7 @@ public class TodoList implements Serializable, MyRepository {
 
     public TodoItem[] topFiveAscendinglyByEndDate() throws Exception {
         TodoItem[] topFiveItems;
-        conn=ConnectionManager.getConnection();
+        conn=connectionManager.getConnection();
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -140,7 +144,7 @@ public class TodoList implements Serializable, MyRepository {
             throw new Exception("Cannot Sort by end date Database. Please Check if the connection is established");
         }
         finally {
-            ConnectionManager.closeConnection();
+            connectionManager.closeConnection();
         }
         return topFiveItems;
 
@@ -148,7 +152,7 @@ public class TodoList implements Serializable, MyRepository {
 
     public TodoItem searchByTitle(String title) throws Exception {
         TodoItem todoItem = new TodoItem();
-        conn=ConnectionManager.getConnection();
+        conn=connectionManager.getConnection();
         try {
             String sql = "select * from " + TodoItem.tableName + " where " + TodoItem.titleColumnName + "=" + "'"+title+"'";
             PreparedStatement p = conn.prepareStatement(sql);
@@ -169,14 +173,14 @@ public class TodoList implements Serializable, MyRepository {
 //            s.printStackTrace();
             throw new Exception("Cannot search by title. Please check if the database connection is established.");
         }finally {
-            ConnectionManager.closeConnection();
+            connectionManager.closeConnection();
         }
         return todoItem;
     }
 
     public TodoItem[] searchByStartDate(LocalDate startDate) throws Exception {
         TodoItem[] listOfResult;
-        conn=ConnectionManager.getConnection();
+        conn=connectionManager.getConnection();
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -193,14 +197,14 @@ public class TodoList implements Serializable, MyRepository {
 //            return new TodoItem[0];
             throw new Exception("Cannot search by startDate. Please check if the database connection is established.");
         }finally {
-            ConnectionManager.closeConnection();
+            connectionManager.closeConnection();
         }
         return listOfResult;
         }
 
     public TodoItem[] searchByEndDate(LocalDate endDate) throws Exception{
         TodoItem[] listOfResult;
-        conn= ConnectionManager.getConnection();
+        conn= connectionManager.getConnection();
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -217,7 +221,7 @@ public class TodoList implements Serializable, MyRepository {
 //            return new TodoItem[0];
             throw new Exception("Cannot search by endDate. Please check if the database connection is established.");
         }finally {
-            ConnectionManager.closeConnection();
+            connectionManager.closeConnection();
         }
         return listOfResult;
     }
@@ -225,7 +229,7 @@ public class TodoList implements Serializable, MyRepository {
 
     public TodoItem[] searchByPriority(int priority) throws Exception{
         TodoItem[] listOfResult;
-        conn = ConnectionManager.getConnection();
+        conn = connectionManager.getConnection();
         try {
             Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
 
@@ -242,7 +246,7 @@ public class TodoList implements Serializable, MyRepository {
 //            return new TodoItem[0];
             throw new Exception("Cannot search by priority. Please check if the database connection is established.");
         }finally {
-            ConnectionManager.closeConnection();
+            connectionManager.closeConnection();
         }
         return listOfResult;
     }
@@ -253,7 +257,7 @@ public class TodoList implements Serializable, MyRepository {
         if(todoItem==null) {
             return false;
         }
-        Connection connection = ConnectionManager.getConnection();
+        Connection connection = connectionManager.getConnection();
         try {
             Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             String query = "UPDATE TodoItem SET  Description =\""+ updatedTodoItem.getDescription()+"\" , Category =\""+updatedTodoItem.getCategory()+"\" , Priority = \""+updatedTodoItem.getPriority()+"\" , StartDate = \""+updatedTodoItem.getStartDate()+"\" , EndDate = \""+updatedTodoItem.getEndDate()+"\" WHERE Title LIKE \""+title+"%\" ;";
@@ -265,14 +269,14 @@ public class TodoList implements Serializable, MyRepository {
             throw new Exception("Cannot update item. Please check if the database connection is established.");
         }
         finally {
-            ConnectionManager.closeConnection();
+            connectionManager.closeConnection();
         }
 
     }
 
     public TodoItem[] showAllItems() throws Exception {
         TodoItem[] todoList;
-        Connection connection = ConnectionManager.getConnection();
+        Connection connection = connectionManager.getConnection();
         try {
             Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             String query ="SELECT * FROM TodoItem ;";
@@ -286,7 +290,7 @@ public class TodoList implements Serializable, MyRepository {
             throw new Exception("Cannot show all todo items. Please check if the database connection is established.");
         }
         finally {
-            ConnectionManager.closeConnection();
+            connectionManager.closeConnection();
         }
 
     }
@@ -296,7 +300,7 @@ public class TodoList implements Serializable, MyRepository {
         if(todoItem==null) {
             return false;
         }
-        Connection connection = ConnectionManager.getConnection();
+        Connection connection = connectionManager.getConnection();
         try {
             Statement statement = connection.createStatement();
             String query = "UPDATE TodoItem SET   Category =\""+category+"\"  WHERE Title LIKE \""+title+"%\" ;";
@@ -308,7 +312,7 @@ public class TodoList implements Serializable, MyRepository {
             throw new Exception("Cannot update category. Please check if the database connection is established.");
         }
         finally {
-            ConnectionManager.closeConnection();
+            connectionManager.closeConnection();
         }
     }
 
@@ -317,7 +321,7 @@ public class TodoList implements Serializable, MyRepository {
         if(todoItem==null) {
             return false;
         }
-        Connection connection = ConnectionManager.getConnection();
+        Connection connection = connectionManager.getConnection();
         try {
             Statement statement = connection.createStatement();
             String query = "UPDATE TodoItem SET   IsFavorite = 1  WHERE Title LIKE \""+title+"%\" ;";
@@ -329,7 +333,7 @@ public class TodoList implements Serializable, MyRepository {
             throw new Exception("Cannot add todo to be favourite. Please check if the database connection is established.");
         }
         finally {
-            ConnectionManager.closeConnection();
+            connectionManager.closeConnection();
         }
     }
 }
