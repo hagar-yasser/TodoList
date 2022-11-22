@@ -2,7 +2,7 @@
 ## How to run the task
 * Write the next commands in terminal 
   ```
-  git clone -b webService https://github.com/hagar-yasser/TodoList.git
+  git clone -b springContextVersion https://github.com/hagar-yasser/TodoList.git
 
   ```
 * Open Workbench then 
@@ -21,13 +21,7 @@
     mvn clean install
  
   ```
-* Open tomcate server version 10 
-* Deploy war file that you will find /TodoList/target/TodoListProducer.war
-* In Postman or any browser try and put any appropriate endpoint 
-  ```
-    http://localhost:8080/TodoListProducer/todoListApi/
-  
-  ```
+* Run the Main Class
 
 #### HINT :
 We are using 
